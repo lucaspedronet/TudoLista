@@ -4,7 +4,7 @@ import { useState } from 'react'
 import styles from './App.module.css'
 
 import { Button } from './components/Button'
-import { Header } from './components/Header'
+import { Header, Header2 } from './components/Header'
 import { Input } from './components/Input'
 import { Empty } from './components/List/Empty'
 import { Header as ListHeader } from './components/List/Header'

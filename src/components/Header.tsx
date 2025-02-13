@@ -7,3 +7,9 @@ export function Header() {
     </header>
   )
 }
+
+export function Header2() {
+
+  return (<div>Lucas Pedro</div>);
+
+}
