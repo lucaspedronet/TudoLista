@@ -2,12 +2,7 @@ import { PlusCircle } from '@phosphor-icons/react'
 
 import styles from './App.module.css'
 
-import { Button } from './components/Button'
-import { Header } from './components/Header'
-import { Input } from './components/Input'
-import { Empty } from './components/List/Empty'
-import { HeaderList } from './components/List/Header'
-import { Item } from './components/List/Item'
+import { Button, Header, Input, Empty, HeaderList, Item } from './components'
 
 export interface ITask {
   id: number

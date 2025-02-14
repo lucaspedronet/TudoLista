@@ -1,4 +1,4 @@
-import styles from './Header.module.css'
+import styles from './HeaderList.module.css'
 
 interface HeaderProps {
   tasksCounter: number
