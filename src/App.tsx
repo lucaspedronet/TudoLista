@@ -1,5 +1,4 @@
 import { PlusCircle } from '@phosphor-icons/react'
-import { useState } from 'react'
 
 import styles from './App.module.css'
 
@@ -7,7 +6,7 @@ import { Button } from './components/Button'
 import { Header } from './components/Header'
 import { Input } from './components/Input'
 import { Empty } from './components/List/Empty'
-import { Header as ListHeader } from './components/List/Header'
+import { HeaderList } from './components/List/Header'
 import { Item } from './components/List/Item'
 
 export interface ITask {
@@ -17,8 +16,6 @@ export interface ITask {
 }
 
 export function App() {
-  const [tasks, setTasks] = useState<ITask[]>([])
-  const [inputValue, setInputValue] = useState('');
 
   return (
     <main>
@@ -27,8 +24,8 @@ export function App() {
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={(e) => setInputValue(e.target.value)}
-            value={inputValue}
+            onChange={() => {}}
+            value={''}
           />
           <Button onClick={() => {}}>
             Criar
@@ -36,17 +33,14 @@ export function App() {
           </Button>
         </div>
 
-        <div className={styles.tasksList}>
-          <ListHeader
-            tasksCounter={tasks.length}
-            checkedTasksCounter={0}
-          />
+        <HeaderList checkedTasksCounter={3} tasksCounter={9} />
 
-          {tasks.length > 0 ? (
+        <div className={styles.tasksList}>
+          {[].length > 0 ? (
             <div>
-              {tasks.map((task) => (
+              {[].map((task) => (
                 <Item
-                  key={task.id}
+                  key={task}
                   data={task}
                   removeTask={() => {}}
                   toggleTaskStatus={() => {}}

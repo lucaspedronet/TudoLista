@@ -1,11 +1,11 @@
 import styles from './Header.module.css'
 
-interface Props {
+interface HeaderProps {
   tasksCounter: number
   checkedTasksCounter: number
 }
 
-export function Header({ tasksCounter, checkedTasksCounter }: Props) {
+export function HeaderList({ tasksCounter, checkedTasksCounter }: HeaderProps) {
   return (
     <header className={styles.container}>
       <aside>
