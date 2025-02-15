@@ -20,6 +20,22 @@ export function App() {
   const [tasks, setTasks] = useState<ITask[]>([])
   const [inputValue, setInputValue] = useState('');
 
+  const handleAddTarefa = () => {
+    if(inputValue.trim() === '') return;
+
+    const newTarefa = {
+      id: Date.now(),
+      text: inputValue,
+      isChecked: false,
+    };
+
+    setTasks([...tasks, newTarefa]); setInputValue('');
+  } 
+
+  const handleRemoverTarefa = (id : number) =>{
+    setTasks(tasks.filter(tasks => tasks.id !== id));
+  }
+
   return (
     <main>
       <Header />
@@ -30,7 +46,7 @@ export function App() {
             onChange={(e) => setInputValue(e.target.value)}
             value={inputValue}
           />
-          <Button onClick={() => {}}>
+          <Button onClick={handleAddTarefa}>
             Criar
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
@@ -48,7 +64,7 @@ export function App() {
                 <Item
                   key={task.id}
                   data={task}
-                  removeTask={() => {}}
+                  removeTask={handleRemoverTarefa}
                   toggleTaskStatus={() => {}}
                 />
               ))}
