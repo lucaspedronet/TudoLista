@@ -32,9 +32,15 @@ export function App() {
     setTasks([...tasks, newTarefa]); setInputValue('');
   } 
 
-  const handleRemoverTarefa = (id : number) =>{
-    setTasks(tasks.filter(tasks => tasks.id !== id));
-  }
+  const handleRemoverTarefa = (id: number) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
+
+  const handleAlterarTaskStatus = ({ id, value }: { id: number; value: boolean }) => {
+    setTasks(tasks.map(task =>
+      task.id === id ? { ...task, isChecked: value } : task
+    ));
+  };
 
   return (
     <main>
@@ -64,8 +70,8 @@ export function App() {
                 <Item
                   key={task.id}
                   data={task}
-                  removeTask={handleRemoverTarefa}
-                  toggleTaskStatus={() => {}}
+                  removeTask={() => handleRemoverTarefa(task.id)}
+                  toggleTaskStatus={handleAlterarTaskStatus}
                 />
               ))}
             </div>
