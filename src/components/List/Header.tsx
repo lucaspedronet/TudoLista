@@ -22,5 +22,5 @@ export function Header({ tasksCounter, checkedTasksCounter }: Props) {
         </span>
       </aside>
     </header>
-  )
+  );
 }

@@ -42,10 +42,11 @@ export function App() {
     ));
   };
 
+  const checkedTasksCounter = tasks.filter(task => task.isChecked).length;
+
   return (
     <main>
-      <Header />
-
+      <Header/>
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
@@ -61,7 +62,7 @@ export function App() {
         <div className={styles.tasksList}>
           <ListHeader
             tasksCounter={tasks.length}
-            checkedTasksCounter={0}
+            checkedTasksCounter={checkedTasksCounter}
           />
 
           {tasks.length > 0 ? (
