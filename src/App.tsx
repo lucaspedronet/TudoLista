@@ -20,6 +20,19 @@ export function App() {
   const [tasks, setTasks] = useState<ITask[]>([])
   const [inputValue, setInputValue] = useState('');
 
+  function handleAddTask() {
+    if (!inputValue.trim()) return;
+
+    const newTask: ITask = {
+      id: Date.now(),
+      text: inputValue,
+      isChecked: false,
+    };
+
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setInputValue('');
+  }
+
   return (
     <main>
       <Header />
@@ -30,7 +43,7 @@ export function App() {
             onChange={(e) => setInputValue(e.target.value)}
             value={inputValue}
           />
-          <Button onClick={() => {}}>
+          <Button onClick={handleAddTask}>
             Criar
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
@@ -39,7 +52,7 @@ export function App() {
         <div className={styles.tasksList}>
           <ListHeader
             tasksCounter={tasks.length}
-            checkedTasksCounter={0}
+            checkedTasksCounter={tasks.filter(task => task.isChecked).length}
           />
 
           {tasks.length > 0 ? (
