@@ -33,6 +33,14 @@ export function App() {
     setInputValue('');
   }
 
+  const removeTask=(id:number)=>{
+    const newTasks =[...tasks]
+    const filteredTask= newTasks.filter((task) => 
+      task.id !== id ? task:null
+    );
+    setTasks(filteredTask);
+  };
+
   return (
     <main>
       <Header />
@@ -61,7 +69,7 @@ export function App() {
                 <Item
                   key={task.id}
                   data={task}
-                  removeTask={() => {}}
+                  removeTask={() => {removeTask(task.id)}}
                   toggleTaskStatus={() => {}}
                 />
               ))}
