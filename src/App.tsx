@@ -45,6 +45,9 @@ export function App() {
     );
   };
 
+  const checkedTasksCounter = tasks.filter((task) => task.isChecked).length;
+  const progress = tasks.length > 0 ? (checkedTasksCounter / tasks.length) * 100 : 0;
+
   return (
     <main>
       <Header />
@@ -60,11 +63,22 @@ export function App() {
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
+        {tasks.length > 0 && (
+          <div className={styles.progressContainer}>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <span className={styles.progressText}>{progress.toFixed(0)}% Concluído</span>
+          </div>
+        )}
 
         <div className={styles.tasksList}>
           <ListHeader
             tasksCounter={tasks.length}
-            checkedTasksCounter={tasks.filter((task) => task.isChecked).length}
+            checkedTasksCounter={checkedTasksCounter}
           />
 
           {tasks.length > 0 ? (
