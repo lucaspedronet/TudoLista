@@ -1,4 +1,4 @@
-import { Trash, Check } from '@phosphor-icons/react'
+import { Trash, CheckCircle, Circle } from '@phosphor-icons/react'
 
 import { ITask } from '../../App'
 
@@ -12,31 +12,34 @@ interface Props {
 
 export function Item({ data, removeTask, toggleTaskStatus }: Props) {
 
-  const checkboxCheckedClassname = data.isChecked
-    ? styles['checkbox-checked']
-    : styles['checkbox-unchecked']
   const paragraphCheckedClassname = data.isChecked
     ? styles['paragraph-checked']
     : ''
 
   return (
     <div className={styles.container}>
-      <div>
-        <label htmlFor="checkbox" onClick={() => {}}>
-          <input readOnly type="checkbox" checked={data.isChecked} />
-          <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
-            {data.isChecked && <Check size={12} />}
-          </span>
+      <div className={styles.taskContent}>
+        <button
+          onClick={() => toggleTaskStatus({ id: data.id, value: !data.isChecked })}
+          className={styles.checkButton}
+        >
+          {data.isChecked ? (
+            <CheckCircle size={16} weight="fill" color="#4EA8DE" />
+          ) : (
+            <Circle size={16} weight="bold" color="#4EA8DE" />
+          )}
+        </button>
 
-          <p className={`${styles.paragraph} ${paragraphCheckedClassname}`}>
-            {data.text}
-          </p>
-        </label>
+        <span className={`${styles.paragraph} ${paragraphCheckedClassname}`}>
+          {data.text}
+        </span>
       </div>
 
-      <button onClick={() => {removeTask(data.id)}}>
+      {/* Botão de remover tarefa */}
+      <button onClick={() => removeTask(data.id)}>
         <Trash size={16} color="#808080" />
       </button>
     </div>
+
   )
 }

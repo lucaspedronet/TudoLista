@@ -1,23 +1,23 @@
-import { PlusCircle } from '@phosphor-icons/react'
-import { useState } from 'react'
+import { PlusCircle } from '@phosphor-icons/react';
+import { useState } from 'react';
 
-import styles from './App.module.css'
+import styles from './App.module.css';
 
-import { Button } from './components/Button'
-import { Header, Header2 } from './components/Header'
-import { Input } from './components/Input'
-import { Empty } from './components/List/Empty'
-import { Header as ListHeader } from './components/List/Header'
-import { Item } from './components/List/Item'
+import { Button } from './components/Button';
+import { Header } from './components/Header';
+import { Input } from './components/Input';
+import { Empty } from './components/List/Empty';
+import { Header as ListHeader } from './components/List/Header';
+import { Item } from './components/List/Item';
 
 export interface ITask {
-  id: number
-  text: string
-  isChecked: boolean
+  id: number;
+  text: string;
+  isChecked: boolean;
 }
 
 export function App() {
-  const [tasks, setTasks] = useState<ITask[]>([])
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const [inputValue, setInputValue] = useState('');
 
   function handleAddTask() {
@@ -33,12 +33,16 @@ export function App() {
     setInputValue('');
   }
 
-  const removeTask=(id:number)=>{
-    const newTasks =[...tasks]
-    const filteredTask= newTasks.filter((task) => 
-      task.id !== id ? task:null
+  const removeTask = (id: number) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+
+  const toggleTaskStatus = (id: number) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
     );
-    setTasks(filteredTask);
   };
 
   return (
@@ -60,7 +64,7 @@ export function App() {
         <div className={styles.tasksList}>
           <ListHeader
             tasksCounter={tasks.length}
-            checkedTasksCounter={tasks.filter(task => task.isChecked).length}
+            checkedTasksCounter={tasks.filter((task) => task.isChecked).length}
           />
 
           {tasks.length > 0 ? (
@@ -69,8 +73,8 @@ export function App() {
                 <Item
                   key={task.id}
                   data={task}
-                  removeTask={() => {removeTask(task.id)}}
-                  toggleTaskStatus={() => {}}
+                  removeTask={() => removeTask(task.id)}
+                  toggleTaskStatus={() => toggleTaskStatus(task.id)}
                 />
               ))}
             </div>
@@ -80,5 +84,5 @@ export function App() {
         </div>
       </section>
     </main>
-  )
+  );
 }
