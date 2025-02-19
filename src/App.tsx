@@ -2,7 +2,8 @@ import { PlusCircle } from '@phosphor-icons/react'
 
 import styles from './App.module.css'
 
-import { Button, Input, Empty, Item } from './components'
+import { Button, Input, Empty, Item, Header } from './components'
+import { useState } from 'react'
 
 export interface ITask {
   id: number
@@ -11,15 +12,19 @@ export interface ITask {
 }
 
 export function App() {
+  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [inputValue, setInputValue] = useState('');
 
   return (
     <main>
 
+      <Header />
+
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            onChange={(e) => setInputValue(e.target.value)}
+            value={inputValue}
           />
           <Button onClick={() => {}}>
             Criar
