@@ -3,6 +3,7 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
+import { useState } from 'react'
 export interface ITask {
   id: number
   text: string
@@ -25,9 +26,21 @@ const listaDeTarefas: ITask[] = [
     text: 'Levar o cachorro para passear',
     isChecked: false
   },
+  {
+    id: 3,
+    text: 'Teste de Front-end',
+    isChecked: false
+  },
 ];
 
 export function App() {
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      text: 'Estudar React',
+      isChecked: false
+    }
+  ]);
 
   function handleAddNewTask() {
 
@@ -37,9 +50,9 @@ export function App() {
       isChecked: false
     };
 
-    listaDeTarefas.push(newTask);
-    console.log("Lita de Tarefas: ", listaDeTarefas);
+    setTasks(nexState => [...nexState, newTask]);
     
+    console.log("tasks: ", tasks);
   }
 
   return (
@@ -60,9 +73,9 @@ export function App() {
         </div>
 
         <div className={styles.tasksList}>
-          {listaDeTarefas.length > 0 ? (
+          {tasks.length > 0 ? (
             <div>
-              {listaDeTarefas.map((task) => (
+              {tasks.map((task) => (
                 <Item
                   key={task.id}
                   data={task}
