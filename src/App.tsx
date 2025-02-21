@@ -25,11 +25,6 @@ const listaDeTarefas: ITask[] = [
     text: 'Levar o cachorro para passear',
     isChecked: false
   },
-  {
-    id: 3,
-    text: 'Teste de Front-end',
-    isChecked: false
-  },
 ];
 
 export function App() {
@@ -52,11 +47,11 @@ export function App() {
         </div>
 
         <div className={styles.tasksList}>
-          {[].length > 0 ? (
+          {listaDeTarefas.length > 0 ? (
             <div>
-              {[].map((task) => (
+              {listaDeTarefas.map((task) => (
                 <Item
-                  key={task}
+                  key={task.id}
                   data={task}
                   removeTask={() => {}}
                   toggleTaskStatus={() => {}}
