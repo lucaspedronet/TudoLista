@@ -44,9 +44,7 @@ export function App() {
       const newState = [...nextState, newTask];
       return newState;
     });
-
-
-  
+    
     console.log("Tasks: ", tasks);
   }
 

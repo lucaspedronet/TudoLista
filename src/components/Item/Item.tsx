@@ -10,14 +10,7 @@ interface Props {
   toggleTaskStatus: ({ id, value }: { id: number; value: boolean }) => void
 }
 
-export function Item({ data, removeTask, toggleTaskStatus }: Props) {
-  function handleTaskToggle() {
-    toggleTaskStatus({ id: data.id, value: !data.isChecked })
-  }
-
-  function handleRemove() {
-    removeTask(data.id)
-  }
+export function Item({ data }: Props) {
 
   const checkboxCheckedClassname = data.isChecked
     ? styles['checkbox-checked']
@@ -29,7 +22,7 @@ export function Item({ data, removeTask, toggleTaskStatus }: Props) {
   return (
     <div className={styles.container}>
       <div>
-        <label htmlFor="checkbox" onClick={handleTaskToggle}>
+        <label htmlFor="checkbox" onClick={() => {}}>
           <input readOnly type="checkbox" checked={data.isChecked} />
           <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
             {data.isChecked && <Check size={12} />}
@@ -41,7 +34,7 @@ export function Item({ data, removeTask, toggleTaskStatus }: Props) {
         </label>
       </div>
 
-      <button onClick={handleRemove}>
+      <button onClick={() => {}}>
         <Trash size={16} color="#808080" />
       </button>
     </div>
