@@ -10,23 +10,6 @@ export interface ITask {
   isChecked: boolean;
 }
 
-const listaDeTarefas: ITask[] = [
-  {
-    id: 1878,
-    text: "Estudar React",
-    isChecked: false,
-  },
-  {
-    id: 2,
-    text: "Enviar e-mail para o cliente",
-    isChecked: false,
-  },
-  {
-    id: 3,
-    text: "Levar o cachorro para passear",
-    isChecked: false,
-  },
-];
 
 export function App() {
   const [tasks, setTasks] = useState<ITask[]>([]);
@@ -39,12 +22,6 @@ export function App() {
     )
       return;
 
-    // for (const task of tasks){
-    //   if(task.text === taskName){
-    //     alert("Já exite uma tarefa com esse nome")
-    //     return
-    //   }
-    // }
 
     const newTask: ITask = {
       id: Math.random(), // número aleatório
