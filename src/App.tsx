@@ -1,63 +1,64 @@
-import { PlusCircle } from '@phosphor-icons/react'
+import { PlusCircle } from '@phosphor-icons/react';
+import styles from './App.module.css';
+import { Button, Input, Empty, Item, Header } from './components';
+import { useState, useEffect } from 'react';
 
-import styles from './App.module.css'
-
-import { Button, Input, Empty, Item, Header } from './components'
-import { useState } from 'react';
 export interface ITask {
-  id: number
-  text: string
-  isChecked: boolean
+  id: number;
+  text: string;
+  isChecked: boolean;
 }
 
-const listaDeTarefas: ITask[] = [
-  {
-    id: 1878,
-    text: 'Estudar React',
-    isChecked: false,
-  },
-  {
-    id: 2,
-    text: 'Enviar e-mail para o cliente',
-    isChecked: false
-  },
-  {
-    id: 3,
-    text: 'Levar o cachorro para passear',
-    isChecked: false
-  },
-];
-
-
 export function App() {
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [tasks, setTasks] = useState<ITask[]>([
+    {
+      id:1,
+      text: 'Task 1',
+      isChecked: false
+    }
+
+  ]);
+  const [taskText, setTaskText] = useState<string>('');
 
   function handleNewAddTask() {
+    if (taskText.trim().length === 0) return; // Evita adicionar tarefas vazias
+
     const newTask: ITask = {
-      id: Math.random(), // número aleatório
-      text: 'Task nova pessoal',
+      id: Math.random(), // Pode ser melhor substituído por uma solução de geração de IDs única
+      text: taskText,
       isChecked: false,
     };
-
-    // nextState => [...nextState, newTask]
-    setTasks((nextState) => {
-      const newState = [...nextState, newTask];
-      return newState;
-    });
     
-    console.log("Tasks: ", tasks);
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setTaskText(''); // Limpa o input após adicionar
   }
+
+  function removeTask(id: number) {
+    setTasks((prevTasks) => prevTasks.filter(task => task.id !== id));
+  }
+
+  function toggleTaskStatus(id: number) {
+    setTasks((prevTasks) =>
+      prevTasks.map(task =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
+  }
+
+  // Debug para verificar atualizações do estado
+  useEffect(() => {
+    console.log("Tasks atualizadas: ", tasks);
+  }, [tasks]);
 
   return (
     <main>
-
       <Header />
 
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            value={taskText}
+            onChange={(e) => setTaskText(e.target.value)}
           />
           <Button onClick={handleNewAddTask}>
             Criar
@@ -68,16 +69,14 @@ export function App() {
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
-              {tasks.map(function nomeDaFuncao(task) {
-                return (
-                  <Item
-                    key={task.id}
-                    data={task}
-                    removeTask={() => {}}
-                    toggleTaskStatus={() => {}}
-                  />
-                )
-              })}
+              {tasks.map(task => (
+                <Item
+                  key={task.id}
+                  data={task}
+                  removeTask={() => removeTask(task.id)}
+                  toggleTaskStatus={() => toggleTaskStatus(task.id)}
+                />
+              ))}
             </div>
           ) : (
             <Empty />
@@ -85,5 +84,5 @@ export function App() {
         </div>
       </section>
     </main>
-  )
+  );
 }
