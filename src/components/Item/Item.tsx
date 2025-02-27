@@ -1,30 +1,29 @@
-import { Trash, Check } from '@phosphor-icons/react'
+import { Trash, Check } from "@phosphor-icons/react";
 
-import { ITask } from '../../App'
+import { ITask } from "../../App";
 
-import styles from './Item.module.css'
+import styles from "./Item.module.css";
 
 interface Props {
-  data: ITask
-  removeTask: (id: number) => void
-  toggleTaskStatus: ({ id, value }: { id: number; value: boolean }) => void
+  data: ITask;
+  removeTask: (id: number) => void;
+  toggleTaskStatus: ( id: number) => void;
 }
 
-export function Item({ data,removeTask }: Props) {
-
+export function Item({ data, removeTask , toggleTaskStatus}: Props) {
   const checkboxCheckedClassname = data.isChecked
-    ? styles['checkbox-checked']
-    : styles['checkbox-unchecked']
+    ? styles["checkbox-checked"]
+    : styles["checkbox-unchecked"];
   const paragraphCheckedClassname = data.isChecked
-    ? styles['paragraph-checked']
-    : ''
+    ? styles["paragraph-checked"]
+    : "";
 
   return (
     <div className={styles.container}>
       <div>
         <label htmlFor="checkbox" onClick={() => {}}>
           <input readOnly type="checkbox" checked={data.isChecked} />
-          <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
+          <span onClick={()=>{toggleTaskStatus(data.id)}} className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
             {data.isChecked && <Check size={12} />}
           </span>
 
@@ -34,9 +33,13 @@ export function Item({ data,removeTask }: Props) {
         </label>
       </div>
 
-      <button onClick={() => {removeTask(data.id)}}>
+      <button
+        onClick={() => {
+          removeTask(data.id);
+        }}
+      >
         <Trash size={16} color="#808080" />
       </button>
     </div>
-  )
+  );
 }

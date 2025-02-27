@@ -33,9 +33,12 @@ export function App() {
   const [taskName, setTaskName] = useState<string>("");
 
   function handleNewAddTask() {
-    if (taskName.trim() === "" || tasks.find((e)=>e.text===taskName) !== undefined) return;
+    if (
+      taskName.trim() === "" ||
+      tasks.find((e) => e.text === taskName) !== undefined
+    )
+      return;
 
-    
     // for (const task of tasks){
     //   if(task.text === taskName){
     //     alert("Já exite uma tarefa com esse nome")
@@ -49,7 +52,6 @@ export function App() {
       isChecked: false,
     };
 
-    
     // nextState => [...nextState, newTask]
     setTasks((nextState) => {
       const newState = [...nextState, newTask];
@@ -61,7 +63,15 @@ export function App() {
   }
 
   function removeTask(id: number) {
-    setTasks((e)=> e.filter((task)=>task.id !==id));
+    setTasks((e) => e.filter((task) => task.id !== id));
+  }
+
+  function taskOk(id: number) {
+    setTasks((e) =>
+      e.map((task) =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
   }
 
   return (
@@ -92,7 +102,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={removeTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={taskOk}
                   />
                 );
               })}
