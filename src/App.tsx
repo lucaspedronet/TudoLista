@@ -52,6 +52,10 @@ export function App() {
     setInputName('');
   }
 
+  function removeTask(id: number) {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  }
+
   return (
     <main>
       <Header />
@@ -77,7 +81,7 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
+                    removeTask={removeTask}
                     toggleTaskStatus={() => {}}
                   />
                 );
