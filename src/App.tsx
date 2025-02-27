@@ -86,12 +86,14 @@ export function App() {
             }}
             value={taskName != "Nova Tarefa" ? taskName : ""}
             placeholder="Adicione uma nova tarefa"
-          />
+            />
           <Button onClick={handleNewAddTask}>
             Criar
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
+        <p>{tasks.filter((task)=>task.isChecked==true).length} tarefa(s) Concluída(s)</p>
+        <p></p>
 
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
