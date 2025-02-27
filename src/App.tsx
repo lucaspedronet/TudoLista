@@ -14,6 +14,10 @@ export function App() {
   const [tasks, setTasks] = useState<ITask[]>([]);
   const [inputName, setInputName] = useState('');
 
+  const removeTask = (id: number) => {
+    setTasks((antesTasks) => antesTasks.filter(task => task.id !== id));
+  }
+
   function handleNewAddTask() {
     if (inputName.trim().length === 0) {
       return;
@@ -59,7 +63,7 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
+                    removeTask={removeTask}
                     toggleTaskStatus={() => {}}
                   />
                 )
