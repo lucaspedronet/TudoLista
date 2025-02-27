@@ -1,13 +1,12 @@
-import { PlusCircle } from '@phosphor-icons/react'
-
-import styles from './App.module.css'
-
-import { Button, Input, Empty, Item, Header } from './components'
+import { PlusCircle } from '@phosphor-icons/react';
+import styles from './App.module.css';
+import { Button, Input, Empty, Item, Header } from './components';
 import { useState } from 'react';
+
 export interface ITask {
-  id: number
-  text: string
-  isChecked: boolean
+  id: number;
+  text: string;
+  isChecked: boolean;
 }
 
 export function App() {
@@ -16,41 +15,53 @@ export function App() {
       id: 1,
       text: 'Demo',
       isChecked: false,
-    }
+    },
   ]);
 
   const [inputName, setInputName] = useState<string>('');
 
+  // Function to generate a unique ID
   function geraIdUnico(): number {
     let newId: number;
     do {
-      newId = Math.random(); 
-    } while (tasks.some((task) => task.id === newId)); // Verifica se o ID já existe
+      newId = Math.random(); // Generate a random ID
+    } while (tasks.some((task) => task.id === newId)); // Ensure the ID is unique
     return newId;
   }
 
+  // Function to add a new task
   function handleNewAddTask() {
-
-    if (inputName.trim().length == 0) {
+    if (inputName.trim().length === 0) {
       return;
     }
 
     const newTask: ITask = {
-      id: Math.random(),
+      id: geraIdUnico(), // Use the function to generate a unique ID
       text: inputName,
-      isChecked: false,      
+      isChecked: false,
     };
-  
-    setTasks((nextState) => [newTask, ...nextState]);
 
+    setTasks((nextState) => [newTask, ...nextState]);
     setInputName('');
+  }
+
+  // Function to remove a task
+  function removeTask(id: number) {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  }
+
+  // Function to toggle task status (completed/not completed)
+  function toggleTaskStatus(id: number) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
   }
 
   return (
     <main>
-
       <Header />
-
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
@@ -66,16 +77,14 @@ export function App() {
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
-              {tasks.map(function nomeDaFuncao(task) {
-                return (
-                  <Item
-                    key={task.id}
-                    data={task}
-                    removeTask={() => {}}
-                    toggleTaskStatus={() => {}}
-                  />
-                )
-              })}
+              {tasks.map((task) => (
+                <Item
+                  key={task.id}
+                  data={task}
+                  removeTask={() => removeTask(task.id)} // Pass the removeTask function
+                  toggleTaskStatus={() => toggleTaskStatus(task.id)} // Pass the toggleTaskStatus function
+                />
+              ))}
             </div>
           ) : (
             <Empty />
@@ -83,5 +92,5 @@ export function App() {
         </div>
       </section>
     </main>
-  )
+  );
 }
