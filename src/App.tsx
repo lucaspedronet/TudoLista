@@ -1,13 +1,13 @@
-import { PlusCircle } from '@phosphor-icons/react'
+import { AlignCenterVertical, PlusCircle } from '@phosphor-icons/react';
 
-import styles from './App.module.css'
+import styles from './App.module.css';
 
-import { Button, Input, Empty, Item, Header } from './components'
+import { Button, Input, Empty, Item, Header } from './components';
 import { useState } from 'react';
 export interface ITask {
-  id: number
-  text: string
-  isChecked: boolean
+  id: number;
+  text: string;
+  isChecked: boolean;
 }
 
 const listaDeTarefas: ITask[] = [
@@ -19,46 +19,50 @@ const listaDeTarefas: ITask[] = [
   {
     id: 2,
     text: 'Enviar e-mail para o cliente',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: 3,
     text: 'Levar o cachorro para passear',
-    isChecked: false
+    isChecked: false,
   },
 ];
 
-
 export function App() {
   const [tasks, setTasks] = useState<ITask[]>([]);
+  const [inputName, setInputName] = useState('');
 
   function handleNewAddTask() {
+    if (
+      inputName.trim().length === 0 ||
+      tasks.some((task) => task.text === inputName)
+    ) {
+      alert('Tarefa ja existe!');
+
+      return;
+    }
+
     const newTask: ITask = {
-      id: Math.random(), // número aleatório
-      text: 'Task nova pessoal',
+      id: Math.random(),
+      text: inputName,
       isChecked: false,
     };
 
-    // nextState => [...nextState, newTask]
-    setTasks((nextState) => {
-      const newState = [...nextState, newTask];
-      return newState;
-    });
-    
-    console.log("Tasks: ", tasks);
+    setTasks((lastTasks) => [...lastTasks, newTask]);
+    setInputName('');
   }
 
   return (
     <main>
-
       <Header />
 
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            onChange={(e) => setInputName(e.target.value)}
+            value={inputName}
           />
+
           <Button onClick={handleNewAddTask}>
             Criar
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
@@ -76,7 +80,7 @@ export function App() {
                     removeTask={() => {}}
                     toggleTaskStatus={() => {}}
                   />
-                )
+                );
               })}
             </div>
           ) : (
@@ -85,5 +89,5 @@ export function App() {
         </div>
       </section>
     </main>
-  )
+  );
 }
