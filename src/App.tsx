@@ -41,9 +41,9 @@ export function App() {
     setTasks((tarefas) => tarefas.filter((task) => task.id !== id));
   }
 
-  // function finalizarTask(){
+  // function finalizarTask(){}
     
-  }
+  
 
   return (
     <main>
