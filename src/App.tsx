@@ -8,6 +8,7 @@ export interface ITask {
   id: number
   text: string
   isChecked: boolean
+  
 }
 
 export function App() {
@@ -33,8 +34,14 @@ const [inputName, setInputName] = useState <string>('');
       };
 
     // nextState => [...nextState, newTask]
-    setTasks((nextState) => [...nextState, newTask]);
-    }
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setInputName('');
+  }
+
+  function handleRemoveTask(id: number) {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id)); 
+  }
+  
     
   return (
     <main>
@@ -61,8 +68,9 @@ const [inputName, setInputName] = useState <string>('');
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
+                    removeTask={() => handleRemoveTask(task.id)} 
                     toggleTaskStatus={() => {}}
+                    
                   />
                 )
               })}
