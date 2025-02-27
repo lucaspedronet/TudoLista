@@ -2,6 +2,7 @@ import { PlusCircle } from "@phosphor-icons/react";
 import styles from "./App.module.css";
 import { Button, Input, Empty, Item, Header } from "./components";
 import { useState } from "react";
+
 export interface ITask {
   id: number;
   text: string;
@@ -20,7 +21,7 @@ export function App() {
 
   function handleNewAddTask() {
     const input = inputName.trim();
-    if (input.length === 0 || tasks.find((task) => task.text == input)) {
+    if (input.length === 0 || tasks.find((task) => task.text === input)) {
       setInputName("");
       return;
     }
@@ -36,9 +37,12 @@ export function App() {
     setInputName("");
   }
 
-  function handleRemoveTask(id:number){
-      setTasks(tarefas => tarefas.filter(task => task.id !== id));
-    }
+  function deleteTask(id: number) {
+    setTasks((tarefas) => tarefas.filter((task) => task.id !== id));
+  }
+
+  // function finalizarTask(){
+    
   }
 
   return (
@@ -60,16 +64,14 @@ export function App() {
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
-              {tasks.map(function nomeDaFuncao(task) {
-                return (
-                  <Item
-                    key={task.id}
-                    data={task}
-                    removeTask={(task.id) => {handleRemoveTask()}}
-                    toggleTaskStatus={() => {}}
-                  />
-                );
-              })}
+              {tasks.map((task) => (
+                <Item
+                  key={task.id}
+                  data={task}
+                  removeTask={deleteTask}
+                  toggleTaskStatus={() => {}}
+                />
+              ))}
             </div>
           ) : (
             <Empty />
