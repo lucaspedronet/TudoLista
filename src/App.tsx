@@ -12,13 +12,13 @@ export function App() {
   const [tasks, setTasks] = useState<ITask[]>([]);
   const [inputName, setInputName] = useState('');
 
-  function toggleTaskStatus(id : number){
+  function toggleTaskStatus(id : number){ /*Função para verificar as tarefas pegando como parametro o id */
     setTasks((prevTasks) => 
-    prevTasks.map(task => task.id === id ? 
+    prevTasks.map(task => task.id === id ? /*prevTasks (o PP me explicou porem ainda estou confuso, estudar mais depois) */
     {...task, isChecked: !task.isChecked} : task))
   }
 
-  function handleRemoveTask(id : number){
+  function handleRemoveTask(id : number){ /*Função para remover pegando como parametro o id */
     setTasks((prevTasks) => prevTasks.filter
     (task => task.id !== id));
   }
@@ -45,8 +45,8 @@ export function App() {
 
   }
 
-  const totalTasks = tasks.length;
-  const completedTasks = tasks.filter(task => task.isChecked).length;
+  const totalTasks = tasks.length; /*Constante criada para contar o tamanho de tarefas que tem na lista */
+  const completedTasks = tasks.filter(task => task.isChecked).length; /*Constante criada para contar o tamanho de tarefas completas que tem na lista (através do is cheked) */
 
   return (
     <main>
@@ -64,6 +64,8 @@ export function App() {
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
+
+        {/*O texto de prograsso sendo iterado toda vez que adicionar uma nova tarefa.*/}
         <div className={styles.progressContainer}>
           <p>Progresso: {completedTasks} / {totalTasks} tarefas concluídas</p>
         </div>
@@ -76,8 +78,8 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => handleRemoveTask(task.id)}
-                    toggleTaskStatus={() => toggleTaskStatus(task.id)}
+                    removeTask={() => handleRemoveTask(task.id)} /*Função de remover a  tarefa .*/
+                    toggleTaskStatus={() => toggleTaskStatus(task.id)} /*Função para checar o status da tarefa */
                   />
                 )
               })}
