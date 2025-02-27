@@ -30,3 +30,10 @@
   flex-direction: column;
   gap: 0.75rem;
 }
+
+
+.statusTarefas{
+  display: flex ;
+  justify-content: space-between;
+  
+}

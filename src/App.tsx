@@ -10,7 +10,6 @@ export interface ITask {
   isChecked: boolean;
 }
 
-
 export function App() {
   const [tasks, setTasks] = useState<ITask[]>([]);
   const [taskName, setTaskName] = useState<string>("");
@@ -21,7 +20,6 @@ export function App() {
       tasks.find((e) => e.text === taskName) !== undefined
     )
       return;
-
 
     const newTask: ITask = {
       id: Math.random(), // número aleatório
@@ -43,13 +41,15 @@ export function App() {
     setTasks((e) => e.filter((task) => task.id !== id));
   }
 
-  function taskOk(id: number) {
+  function changeTaskStatus(id: number) {
     setTasks((e) =>
       e.map((task) =>
         task.id === id ? { ...task, isChecked: !task.isChecked } : task
       )
     );
   }
+
+  const tasksCompleted = tasks.filter((task) => task.isChecked == true).length;
 
   return (
     <main>
@@ -63,14 +63,17 @@ export function App() {
             }}
             value={taskName != "Nova Tarefa" ? taskName : ""}
             placeholder="Adicione uma nova tarefa"
-            />
+          />
           <Button onClick={handleNewAddTask}>
             Criar
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
-        <p>{tasks.filter((task)=>task.isChecked==true).length} tarefa(s) Concluída(s)</p>
-        <p></p>
+
+        <div className={styles.statusTarefas}>
+          <p>{tasksCompleted} tarefa(s) concluída(s)</p>
+          <p>{tasks.length - tasksCompleted} tarefa(s) pendente(s)</p>
+        </div>
 
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
@@ -81,7 +84,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={removeTask}
-                    toggleTaskStatus={taskOk}
+                    toggleTaskStatus={changeTaskStatus}
                   />
                 );
               })}
