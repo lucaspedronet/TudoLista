@@ -11,15 +11,9 @@ export interface ITask {
 }
 
 export function App() {
-  const [tasks, setTasks] = useState<ITask[]>([
-    {
-      id: 1,
-      text: 'Demo',
-      isChecked: false,
-    }
-  ]);
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const [inputName, setInputName] = useState('');
-
+    
   function handleNewAddTask() {
     if (inputName.trim().length === 0) {
       return;
@@ -31,14 +25,25 @@ export function App() {
       isChecked: false,
     };
 
-    setTasks((test) => [...test, newTask]);
-
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    
     setInputName('');
+  }
+
+  function handleRemoveTask(id: number) {
+    setTasks((prevTasks) => prevTasks.filter(task => task.id !== id));
+  }
+
+  function handleAlterarTaskStatus (id: number) {
+    setTasks((prevTasks) => 
+      prevTasks.map(task => 
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
   }
 
   return (
     <main>
-
       <Header />
 
       <section className={styles.content}>
@@ -61,8 +66,8 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
-                    toggleTaskStatus={() => {}}
+                    removeTask={()=> handleRemoveTask(task.id)}
+                    toggleTaskStatus = {() => handleAlterarTaskStatus(task.id)}
                   />
                 )
               })}
