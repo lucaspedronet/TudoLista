@@ -1,51 +1,47 @@
 import { PlusCircle } from '@phosphor-icons/react'
-
 import styles from './App.module.css'
-
 import { Button, Input, Empty, Item, Header } from './components'
 import { useState } from 'react';
+
 export interface ITask {
   id: number
   text: string
   isChecked: boolean
 }
 
-const listaDeTarefas: ITask[] = [
-  {
-    id: 1878,
-    text: 'Estudar React',
-    isChecked: false,
-  },
-  {
-    id: 2,
-    text: 'Enviar e-mail para o cliente',
-    isChecked: false
-  },
-  {
-    id: 3,
-    text: 'Levar o cachorro para passear',
-    isChecked: false
-  },
-];
-
-
 export function App() {
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  //initial state
+  const [tasks, setTasks] = useState<ITask[]>([
+    {
+      id: 1,
+      text: 'Demo',
+      isChecked: false,
+    }
+  ]);
+  const [inputName, setInputName] = useState('');
 
   function handleNewAddTask() {
+    let input = inputName.trim();
+    if (input.length == 0 || tasks.find(task => task.text == input)) {
+      setInputName('');
+      return;
+    }
+
     const newTask: ITask = {
-      id: Math.random(), // número aleatório
-      text: 'Task nova pessoal',
+      //id único e aleatório
+      id: Math.random(),
+      //texto verificado do usuário
+      text: inputName,
+      //sempre começa não completado
       isChecked: false,
     };
 
-    // nextState => [...nextState, newTask]
-    setTasks((nextState) => {
-      const newState = [...nextState, newTask];
-      return newState;
-    });
-    
-    console.log("Tasks: ", tasks);
+    setTasks((nextState) => [newTask, ...nextState]);
+
+    setInputName('');
+  };
+  function deleteTask(taskId: number){
+    setTasks((nextState) => (nextState.filter((task) => task.id == taskId)));
   }
 
   return (
@@ -56,8 +52,9 @@ export function App() {
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            onChange={ // recuperando o evento do usuário
+            (e) => setInputName(e.target.value)}
+            value={inputName}
           />
           <Button onClick={handleNewAddTask}>
             Criar
@@ -73,13 +70,14 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
+                    removeTask={deleteTask(task.id)}
                     toggleTaskStatus={() => {}}
                   />
                 )
               })}
             </div>
           ) : (
+            // componente caso lista = []
             <Empty />
           )}
         </div>
