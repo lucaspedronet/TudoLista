@@ -10,42 +10,37 @@ export interface ITask {
   isChecked: boolean
 }
 
-const listaDeTarefas: ITask[] = [
-  {
-    id: 1878,
-    text: 'Estudar React',
-    isChecked: false,
-  },
-  {
-    id: 2,
-    text: 'Enviar e-mail para o cliente',
-    isChecked: false
-  },
-  {
-    id: 3,
-    text: 'Levar o cachorro para passear',
-    isChecked: false
-  },
-];
-
-
 export function App() {
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [tasks, setTasks] = useState<ITask[]>([
+    {
+      id: 1,
+      text: 'Demo',
+      isChecked: false,
+    }
+  ]);
+  const [inputName, setInputName] = useState<string>('');
 
   function handleNewAddTask() {
+    // verificar se o input está vazio
+    if (inputName.trim().length === 0) {
+      return;
+    }
+    // verificar se o input é igual a uma task já existente
+    if (inputName === tasks.find((task) => task.text === inputName)?.text) {
+      return;
+    }
+
     const newTask: ITask = {
       id: Math.random(), // número aleatório
-      text: 'Task nova pessoal',
+      text: inputName,
       isChecked: false,
     };
 
     // nextState => [...nextState, newTask]
-    setTasks((nextState) => {
-      const newState = [...nextState, newTask];
-      return newState;
-    });
-    
-    console.log("Tasks: ", tasks);
+    setTasks((nextState) => [...nextState, newTask]);
+
+    // limpar o input
+    setInputName('');
   }
 
   return (
@@ -56,8 +51,8 @@ export function App() {
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            onChange={(e) => setInputName(e.target.value)}
+            value={inputName}
           />
           <Button onClick={handleNewAddTask}>
             Criar
