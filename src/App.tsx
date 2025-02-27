@@ -43,6 +43,11 @@ export function App() {
     setInputName('');
   }
 
+  function handleRemoveTask(id: number) {
+    // nextState => nextState.filter((task) => task.id !== id)
+    setTasks((nextState) => nextState.filter((task) => task.id !== id));
+  }
+
   return (
     <main>
 
@@ -68,7 +73,7 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
+                    removeTask={() => handleRemoveTask(task.id)}
                     toggleTaskStatus={() => {}}
                   />
                 )
