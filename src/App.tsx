@@ -33,7 +33,7 @@ export function App() {
 
     setTasks((test) => [...test, newTask]);
 
-    setInputName('');
+    setInputName('')
   }
 
   return (
