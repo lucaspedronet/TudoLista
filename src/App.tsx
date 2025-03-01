@@ -3,33 +3,35 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
+import { useState } from 'react';
 export interface ITask {
   id: number
   text: string
   isChecked: boolean
 }
 
-const listaDeTarefas: ITask[] = [
-  {
-    id: 1,
-    text: 'Estudar React',
-    isChecked: false,
-  },
-  {
-    id: 2,
-    text: 'Estudar TypeScript',
-    isChecked: false,
-  },
-  {
-    id: 3,
-    text: 'Estudar CSS',
-    isChecked: false,
-  },
-];
+// const BRANCH = 'aula04/gestor-tarefas';
+const initialState: ITask[] = [];
 
 export function App() {
+  const [tasks, setTasks] = useState(initialState);
+  const [inputName, setInputName] = useState('');
 
   function handleNewAddTask() {
+   if (inputName.trim().length <= 0) {
+    return;
+   }
+   const existTask = tasks.find(t => t.text === inputName);
+
+   if (existTask) {
+    return;
+   }
+   const newTask: ITask = {
+    id: Math.random(),
+    text: inputName,
+    isChecked: false,
+   };
+   setTasks((prevState) => [...prevState, newTask]);
   }
 
   return (
@@ -40,8 +42,8 @@ export function App() {
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            onChange={(e) => setInputName(e.target.value)}
+            value={inputName}
           />
           <Button onClick={handleNewAddTask}>
             Criar
@@ -50,9 +52,9 @@ export function App() {
         </div>
 
         <div className={styles.tasksList}>
-          {listaDeTarefas.length > 0 ? (
+          {tasks.length > 0 ? (
             <div>
-              {listaDeTarefas.map((task) => {
+              {tasks.map((task) => {
                 return (
                   <Item
                     key={task.id}
