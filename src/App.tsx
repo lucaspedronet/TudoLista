@@ -25,14 +25,23 @@ export function App() {
   const [tasks, setTasks] = useState(initialState);
   const [inputName, setInputName] = useState("");
 
+  function removeTask(id: number) {
+    const index = tasks.findIndex((task) => task.id === id);
+    if (index >= 0) {
+      setTasks(tasks.filter((_, i) => i!== index));
+    }
+  }
+
+
   function handleNewAddTask() {
-    if(inputName.trim().length <= 0 ){
+
+    if (inputName.trim().length <= 0){
       return;
     }
 
     const existTask = tasks.find(t => t.text === inputName);
 
-    if (existTask){
+    if (existTask) {
       return;
     }
 
@@ -41,6 +50,7 @@ export function App() {
       text: inputName,
       isChecked: false,
     };
+
     setTasks((prevState) => [...prevState, newTask]);
   }
 
@@ -62,8 +72,7 @@ export function App() {
         </div>
 
         <div className={styles.tasksList}>
-           {
-          tasks.length > 0 ? (
+          {tasks.length > 0 ? (
             <div>
               {tasks.map((task) => {
                 return (
