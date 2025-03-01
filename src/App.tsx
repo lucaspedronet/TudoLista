@@ -1,47 +1,54 @@
 import { PlusCircle } from '@phosphor-icons/react'
-
 import styles from './App.module.css'
-
 import { Button, Input, Empty, Item, Header } from './components'
+import { useState } from 'react'
+
 export interface ITask {
   id: number
   text: string
   isChecked: boolean
 }
 
-const listaDeTarefas: ITask[] = [
-  {
-    id: 1,
-    text: 'Estudar React',
-    isChecked: false,
-  },
-  {
-    id: 2,
-    text: 'Estudar TypeScript',
-    isChecked: false,
-  },
-  {
-    id: 3,
-    text: 'Estudar CSS',
-    isChecked: false,
-  },
-];
+const listaDeTarefas: ITask[] = []; 
 
 export function App() {
+  const [tasks, setTasks] = useState<ITask[]>(listaDeTarefas);
+  const [newTaskText, setNewTaskText] = useState('');
 
   function handleNewAddTask() {
+    const trimmedText = newTaskText.trim(); 
+    if (trimmedText.length === 0) return; 
+
+    const taskAlreadyExists = tasks.some(task => task.text.trim().toLowerCase() === trimmedText.toLowerCase());
+
+    if (taskAlreadyExists) {
+      alert('Já existe uma tarefa com esse nome!');
+      return;
+    }
+
+    const newTask: ITask = {
+      id: tasks.length + 1, 
+      text: trimmedText, 
+      isChecked: false,
+    };
+
+    setTasks([...tasks, newTask]);
+    setNewTaskText(''); 
   }
-
+  function handleRemoveTask(id: number) {
+    const updatedTasks = tasks.filter(task => task.id !== id);
+    setTasks(updatedTasks); 
+  }
   return (
-    <main>
 
+    <main>
       <Header />
 
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            onChange={(e) => setNewTaskText(e.target.value)}
+            value={newTaskText}
           />
           <Button onClick={handleNewAddTask}>
             Criar
@@ -50,14 +57,15 @@ export function App() {
         </div>
 
         <div className={styles.tasksList}>
-          {listaDeTarefas.length > 0 ? (
+          {tasks.length > 0 ? (
             <div>
-              {listaDeTarefas.map((task) => {
+              {tasks.map((task) => {
                 return (
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
+                    removeTask={() => handleRemoveTask(task.id)}
+
                     toggleTaskStatus={() => {}}
                   />
                 )
