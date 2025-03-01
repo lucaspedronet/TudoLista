@@ -3,33 +3,38 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
+import { useState } from 'react'
 export interface ITask {
   id: number
   text: string
   isChecked: boolean
 }
 
-const listaDeTarefas: ITask[] = [
-  {
-    id: 1,
-    text: 'Estudar React',
-    isChecked: false,
-  },
-  {
-    id: 2,
-    text: 'Estudar TypeScript',
-    isChecked: false,
-  },
-  {
-    id: 3,
-    text: 'Estudar CSS',
-    isChecked: false,
-  },
-];
-
 export function App() {
 
-  function handleNewAddTask() {
+  const [task, setTasks] = useState<ITask[]>([]);
+  const [inputName, setInputName] = useState('');
+
+  function handleNewAddTask ()  {
+    if (inputName.trim().length <= 0){
+      return;
+    }
+    const existTask = task.find(t => t.text === inputName)
+    if (existTask){
+      return;
+    }
+
+    const newTask: ITask = {
+        id: Date.now(),
+        text: inputName,
+        isChecked: false
+    };
+    setTasks((prevState) => [...prevState, newTask]);
+
+  }
+
+  function handleDeleteTask (id: number) {
+    setTasks(task.filter((i) => i.id !== id))
   }
 
   return (
@@ -40,8 +45,8 @@ export function App() {
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            onChange={(e) => setInputName(e.target.value)}
+            value={inputName}
           />
           <Button onClick={handleNewAddTask}>
             Criar
@@ -50,14 +55,14 @@ export function App() {
         </div>
 
         <div className={styles.tasksList}>
-          {listaDeTarefas.length > 0 ? (
+          {task.length > 0 ? (
             <div>
-              {listaDeTarefas.map((task) => {
+              {task.map((task) => {
                 return (
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
+                    handleDeleteTask={handleDeleteTask}
                     toggleTaskStatus={() => {}}
                   />
                 )
