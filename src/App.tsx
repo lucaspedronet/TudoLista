@@ -3,33 +3,45 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
+import { useState } from 'react'
+
 export interface ITask {
   id: number
   text: string
   isChecked: boolean
 }
 
-const listaDeTarefas: ITask[] = [
-  {
-    id: 1,
-    text: 'Estudar React',
-    isChecked: false,
-  },
-  {
-    id: 2,
-    text: 'Estudar TypeScript',
-    isChecked: false,
-  },
-  {
-    id: 3,
-    text: 'Estudar CSS',
-    isChecked: false,
-  },
-];
 
 export function App() {
+  const [listaDeTarefas,setListaDeTarefas] = useState<ITask[]>([])
+  const [inputTask,setInputTask] = useState('')
+
+  function handleInputTask(textValue:string){
+    setInputTask(textValue)
+  }
 
   function handleNewAddTask() {
+    if(inputTask.trim().length>0 && !listaDeTarefas.find((t)=>t.text===inputTask)){
+      const task = {
+        id:Math.random(),
+        text:inputTask,
+        isChecked:false
+      }
+      setListaDeTarefas([...listaDeTarefas,task])
+    }
+
+  }
+
+  function handleRemoveTask(taskId:number){
+    setListaDeTarefas((prevLista)=>(prevLista.filter((item)=>item.id!==taskId)))
+  }
+
+  function handleToggleStatus(taskId: number,value:boolean) {
+    setListaDeTarefas((prevLista) =>
+      prevLista.map((task) =>
+        task.id === taskId ? { ...task, isChecked: !value } : task
+      )
+    )
   }
 
   return (
@@ -40,8 +52,8 @@ export function App() {
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            onChange={(e) => handleInputTask(e.target.value)}
+            value={inputTask}
           />
           <Button onClick={handleNewAddTask}>
             Criar
@@ -57,8 +69,8 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
-                    toggleTaskStatus={() => {}}
+                    removeTask={() => handleRemoveTask(task.id)}
+                    toggleTaskStatus={() => handleToggleStatus(task.id,task.isChecked)}
                   />
                 )
               })}
