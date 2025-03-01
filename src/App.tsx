@@ -1,49 +1,53 @@
-import { PlusCircle } from '@phosphor-icons/react'
+import { PlusCircle } from "@phosphor-icons/react";
 
-import styles from './App.module.css'
-
-<<<<<<< HEAD
-import { Button, Input, Empty, Item, Header } from './components'
-import { useState } from 'react'
-=======
-import { Button } from './components/Button'
-import { Header, Header2 } from './components/Header'
-import { Input } from './components/Input'
-import { Empty } from './components/List/Empty'
-import { Header as ListHeader } from './components/List/Header'
-import { Item } from './components/List/Item'
->>>>>>> 0d29024ad47d34c727d2793f892132c70ada2067
+import styles from "./App.module.css";
+import { useState } from "react";
+import { Button, Empty, Header, Input, Item } from "./components";
 
 export interface ITask {
-  id: number
-  text: string
-  isChecked: boolean
+  id: number;
+  text: string;
+  isChecked: boolean;
 }
 
 export function App() {
   const [tasks, setTasks] = useState<ITask[]>([]);
-  const [inputName, setInputName] = useState('')
+  const [inputName, setInputName] = useState("");
 
-  function addTask() {
-    if (inputName.trim().length <= 0) {
-      return;
+  const handleAddTask = () => {
+    const text = inputName.trim();
+
+    if (text.length <= 0) {
+      return setInputName("");
     }
-    const existTask = tasks.find(t => t.text === inputName);
+
+    const existTask = tasks.find((t) => t.text === text);
+
     if (existTask) {
-      return;
+      return setInputName("");
     }
+
     const newTask: ITask = {
-      id: Math.random(),
+      id: Date.now(),
       text: inputName,
       isChecked: false,
-    }
-    setTasks((prevState) => [...prevState, newTask]);
-    setInputName('');
-  }
+    };
 
-  function removeTask(id: number) {
-    setTasks((prevTasks) => prevTasks.filter(task => task.id !== id));
-  }
+    setTasks((prevState) => [...prevState, newTask]);
+    setInputName("");
+  };
+
+  const handleRemoveTask = (id: number) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+
+  const toggleTaskStatus = (id: number) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
+  };
 
   return (
     <main>
@@ -55,7 +59,7 @@ export function App() {
             onChange={(e) => setInputName(e.target.value)}
             value={inputName}
           />
-          <Button onClick={addTask}>
+          <Button onClick={handleAddTask}>
             Criar
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
@@ -68,8 +72,8 @@ export function App() {
                 <Item
                   key={task.id}
                   data={task}
-                  removeTask={() => removeTask(task.id)}
-                  toggleTaskStatus={() => {}}
+                  removeTask={handleRemoveTask}
+                  toggleTaskStatus={toggleTaskStatus}
                 />
               ))}
             </div>
@@ -79,5 +83,5 @@ export function App() {
         </div>
       </section>
     </main>
-  )
+  );
 }
