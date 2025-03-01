@@ -10,7 +10,7 @@ interface Props {
   toggleTaskStatus: ({ id, value }: { id: number; value: boolean }) => void
 }
 
-export function Item({ data }: Props) {
+export function Item({ data,handleDeleteTask }: Props) {
 
   const checkboxCheckedClassname = data.isChecked
     ? styles['checkbox-checked']
