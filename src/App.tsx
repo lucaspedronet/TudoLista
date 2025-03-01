@@ -17,6 +17,11 @@ export function App() {
   const [tasks, setTasks] = useState(initialState);
   const [inputName, setInputName] = useState("");
 
+  function removeTask(id: number) {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  }
+
+
   function handleNewAddTask() {
 
     if (inputName.trim().length <= 0){
@@ -63,7 +68,7 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
+                    removeTask={() => removeTask(task.id)}
                     toggleTaskStatus={() => {}}
                   />
                 )
