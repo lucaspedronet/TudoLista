@@ -15,6 +15,7 @@ export interface ITask {
 export function App() {
   const [listaDeTarefas,setListaDeTarefas] = useState<ITask[]>([])
   const [inputTask,setInputTask] = useState('')
+  const [countCompletedTasks,setCountCompletedTasks] = useState(0)
 
   function handleInputTask(textValue:string){
     setInputTask(textValue)
@@ -37,11 +38,14 @@ export function App() {
   }
 
   function handleToggleStatus(taskId: number,value:boolean) {
-    setListaDeTarefas((prevLista) =>
-      prevLista.map((task) =>
-        task.id === taskId ? { ...task, isChecked: !value } : task
-      )
+    const novaLista = listaDeTarefas.map((task) =>
+      task.id === taskId ? { ...task, isChecked: !value } : task
     )
+  
+    const novasTarefasConcluidas = novaLista.filter((task) => task.isChecked).length
+  
+    setListaDeTarefas(novaLista)
+    setCountCompletedTasks(novasTarefasConcluidas)
   }
 
   return (
@@ -60,7 +64,10 @@ export function App() {
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
-
+        <div>
+            <p>Tarefas Concluídas:</p>
+            <p>{countCompletedTasks}</p>
+        </div>
         <div className={styles.tasksList}>
           {listaDeTarefas.length > 0 ? (
             <div>
