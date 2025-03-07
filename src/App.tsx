@@ -3,12 +3,8 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
-<<<<<<< HEAD
-import { useState } from 'react';
-=======
 import { useState } from 'react'
 
->>>>>>> Lucas_Franco_de_Castro/aula-04-atividade
 export interface ITask {
   id: number
   text: string
