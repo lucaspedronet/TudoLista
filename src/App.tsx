@@ -4,6 +4,7 @@ import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
 import { useState } from 'react'
+import { HeaderList } from './components/HeaderList/HeaderList'
 export interface ITask {
   id: number
   text: string
@@ -15,33 +16,39 @@ export function App() {
   const [task, setTasks] = useState<ITask[]>([]);
   const [inputName, setInputName] = useState('');
 
-  function handleNewAddTask ()  {
-    if (inputName.trim().length <= 0){
+  function handleNewAddTask() {
+    if (inputName.trim().length <= 0) {
       return;
     }
     const existTask = task.find(t => t.text === inputName)
-    if (existTask){
+    if (existTask) {
       return;
     }
 
     const newTask: ITask = {
-        id: Date.now(),
-        text: inputName,
-        isChecked: false
+      id: Date.now(),
+      text: inputName,
+      isChecked: false
     };
     setTasks((prevState) => [...prevState, newTask]);
 
   }
 
-  function handleDeleteTask (id: number) {
+  function handleDeleteTask(id: number) {
     setTasks(task.filter((i) => i.id !== id))
+  }
+
+  function toggleTaskStatus(id: number) {
+    setTasks((prevTask) =>
+      prevTask.map((t) =>
+        t.id === id ? { ...t, isChecked: !t.isChecked } : t
+      )
+    )
   }
 
   return (
     <main>
-
       <Header />
-
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
@@ -55,6 +62,9 @@ export function App() {
         </div>
 
         <div className={styles.tasksList}>
+
+          <HeaderList count={task.length} checkedCount={task.filter((e) => e.isChecked === true).length}/>
+
           {task.length > 0 ? (
             <div>
               {task.map((task) => {
@@ -63,7 +73,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     handleDeleteTask={handleDeleteTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={toggleTaskStatus}
                   />
                 )
               })}
