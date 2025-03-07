@@ -3,6 +3,7 @@ import { PlusCircle } from "@phosphor-icons/react";
 import styles from "./App.module.css";
 import { useState } from "react";
 import { Button, Empty, Header, Input, Item } from "./components";
+import { HeaderList } from "./components/HeaderList/HeaderList";
 
 export interface ITask {
   id: number;
@@ -66,6 +67,11 @@ export function App() {
         </div>
 
         <div className={styles.tasksList}>
+          <HeaderList
+            tasksCounter={tasks.length}
+            checkedTasksCounter={tasks.filter((task) => task.isChecked).length}
+          />
+
           {tasks.length > 0 ? (
             <div>
               {tasks.map((task) => (
