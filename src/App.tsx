@@ -3,35 +3,49 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
+<<<<<<< HEAD
 import { useState } from 'react';
+=======
+import { useState } from 'react'
+
+>>>>>>> Lucas_Franco_de_Castro/aula-04-atividade
 export interface ITask {
   id: number
   text: string
   isChecked: boolean
 }
 
-// const BRANCH = 'aula04/gestor-tarefas';
-const initialState: ITask[] = [];
 
 export function App() {
-  const [tasks, setTasks] = useState(initialState);
-  const [inputName, setInputName] = useState('');
+  const [listaDeTarefas,setListaDeTarefas] = useState<ITask[]>([])
+  const [inputTask,setInputTask] = useState('')
+
+  function handleInputTask(textValue:string){
+    setInputTask(textValue)
+  }
 
   function handleNewAddTask() {
-   if (inputName.trim().length <= 0) {
-    return;
-   }
-   const existTask = tasks.find(t => t.text === inputName);
+    if(inputTask.trim().length>0 && !listaDeTarefas.find((t)=>t.text===inputTask)){
+      const task = {
+        id:Math.random(),
+        text:inputTask,
+        isChecked:false
+      }
+      setListaDeTarefas([...listaDeTarefas,task])
+    }
 
-   if (existTask) {
-    return;
-   }
-   const newTask: ITask = {
-    id: Math.random(),
-    text: inputName,
-    isChecked: false,
-   };
-   setTasks((prevState) => [...prevState, newTask]);
+  }
+
+  function handleRemoveTask(taskId:number){
+    setListaDeTarefas((prevLista)=>(prevLista.filter((item)=>item.id!==taskId)))
+  }
+
+  function handleToggleStatus(taskId: number,value:boolean) {
+    setListaDeTarefas((prevLista) =>
+      prevLista.map((task) =>
+        task.id === taskId ? { ...task, isChecked: !value } : task
+      )
+    )
   }
 
   return (
@@ -42,8 +56,8 @@ export function App() {
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={(e) => setInputName(e.target.value)}
-            value={inputName}
+            onChange={(e) => handleInputTask(e.target.value)}
+            value={inputTask}
           />
           <Button onClick={handleNewAddTask}>
             Criar
@@ -52,15 +66,15 @@ export function App() {
         </div>
 
         <div className={styles.tasksList}>
-          {tasks.length > 0 ? (
+          {listaDeTarefas.length > 0 ? (
             <div>
-              {tasks.map((task) => {
+              {listaDeTarefas.map((task) => {
                 return (
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
-                    toggleTaskStatus={() => {}}
+                    removeTask={() => handleRemoveTask(task.id)}
+                    toggleTaskStatus={() => handleToggleStatus(task.id,task.isChecked)}
                   />
                 )
               })}
