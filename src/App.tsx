@@ -34,6 +34,12 @@ export function App() {
    setTasks((prevState) => [...prevState, newTask]);
   }
 
+  function handleRemoveTask(id: number) {
+    const filterTasks = tasks.filter(task => task.id !== id);
+
+    setTasks(filterTasks);
+  }
+
   return (
     <main>
 
@@ -59,7 +65,7 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-                    removeTask={() => {}}
+                    removeTask={handleRemoveTask}
                     toggleTaskStatus={() => {}}
                   />
                 )
