@@ -39,10 +39,23 @@ export function App() {
     const updatedTasks = tasks.filter(task => task.id !== id);
     setTasks(updatedTasks); 
   }
-  return (
+  function handleToggleTaskStatus({ id, value }: { id: number; value: boolean }) {
+    // Atualiza o status da tarefa com o ID correspondente
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id) {
+        return { ...task, isChecked: value };
+      }
+      return task;
+    });
+    setTasks(updatedTasks); // Atualiza a lista de tarefas
+  }
 
+  // Calcula o número de tarefas concluídas
+  const completedTasksCount = tasks.filter(task => task.isChecked).length;
+
+  return (
     <main>
-      <Header />
+      <Header />  
 
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
@@ -56,6 +69,20 @@ export function App() {
           </Button>
         </div>
 
+
+        <div className={styles.tasksProgress}>
+          <div className={styles.createdTasks}>
+            <strong>Tarefas criadas</strong>
+            <span>{tasks.length}</span>
+          </div>
+
+          <div className={styles.completedTasks}>
+            <strong>Concluídas</strong>
+            <span>{completedTasksCount} de {tasks.length}</span>
+          </div>
+        </div>
+
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
@@ -65,8 +92,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={() => handleRemoveTask(task.id)}
-
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={handleToggleTaskStatus}
                   />
                 )
               })}
