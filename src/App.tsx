@@ -40,6 +40,13 @@ export function App() {
     setTasks(filterTasks);
   }
 
+  function TaskStatus(id: number) {
+    setTasks((prevTasks) => prevTasks.map(task => task.id === id ? { ...task, isChecked: !task.isChecked } : task));
+  }
+
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(task => task.isChecked).length;
+
   return (
     <main>
 
@@ -66,7 +73,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={() => TaskStatus(task.id)}
                   />
                 )
               })}
