@@ -10,19 +10,22 @@ interface ItemProps {
   toggleTaskStatus: ({ id, value }: { id: number; value: boolean }) => void
 }
 
-export function Item({ data, removeTask }: ItemProps) {
-
+export function Item({ data, removeTask, toggleTaskStatus }: ItemProps) {
   const checkboxCheckedClassname = data.isChecked
     ? styles['checkbox-checked']
-    : styles['checkbox-unchecked']
+    : styles['checkbox-unchecked'];
   const paragraphCheckedClassname = data.isChecked
     ? styles['paragraph-checked']
-    : ''
+    : '';
+
+  const handleToggleTaskStatus = () => {
+    toggleTaskStatus({ id: data.id, value: !data.isChecked });
+  };
 
   return (
     <div className={styles.container}>
       <div>
-        <label htmlFor="checkbox" onClick={() => {}}>
+        <label htmlFor="checkbox" onClick={handleToggleTaskStatus}>
           <input readOnly type="checkbox" checked={data.isChecked} />
           <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
             {data.isChecked && <Check size={12} />}
@@ -38,5 +41,5 @@ export function Item({ data, removeTask }: ItemProps) {
         <Trash size={16} color="#808080" />
       </button>
     </div>
-  )
+  );
 }
