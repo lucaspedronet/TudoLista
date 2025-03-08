@@ -17,8 +17,19 @@ export function App() {
   const [tasks, setTasks] = useState(initialState);
   const [inputName, setInputName] = useState("");
 
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter((task) => task.isChecked).length;
+
   function removeTask(id: number) {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  }
+
+  function toggleTaskStatus({ id, value }: { id: number; value: boolean }) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, isChecked: value } : task
+     )
+   );
   }
 
 
@@ -63,13 +74,16 @@ export function App() {
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
+              <div>
+                <p>{completedTasks}/{totalTasks} tarefas concluídas</p>
+              </div>
               {tasks.map((task) => {
                 return (
                   <Item
                     key={task.id}
                     data={task}
                     removeTask={() => removeTask(task.id)}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={() => toggleTaskStatus({ id: task.id, value: !task.isChecked })}
                   />
                 )
               })}
