@@ -1,78 +1,74 @@
 import { PlusCircle } from '@phosphor-icons/react'
-
 import styles from './App.module.css'
-
 import { Button, Input, Empty, Item, Header } from './components'
 import { useState } from 'react';
+
 export interface ITask {
-  id: number
-  text: string
-  isChecked: boolean
+  id: number;
+  text: string;
+  isChecked: boolean;
 }
 
-// const BRANCH = 'aula04/gestor-tarefas';
-const initialState: ITask[] = [];
-
 export function App() {
-  const [tasks, setTasks] = useState(initialState);
-  const [inputName, setInputName] = useState('');
+  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [taskText, setTaskText] = useState('');
 
   function handleNewAddTask() {
-   if (inputName.trim().length <= 0) {
-    return;
-   }
+    if (!taskText.trim()) return;
 
-   const existTask = tasks.find(t => t.text === inputName);
+    const newTask: ITask = {
+      id: Date.now(),
+      text: taskText,
+      isChecked: false,
+    };
 
-   if (existTask) {
-    return;
-   }
-   
-   const newTask: ITask = {
-    id: Math.random(),
-    text: inputName,
-    isChecked: false,
-   };
-   setTasks((prevState) => [...prevState, newTask]);
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setTaskText('');
   }
 
   function handleRemoveTask(id: number) {
-    const filterTasks = tasks.filter(task => task.id !== id);
-
-    setTasks(filterTasks);
-    setInputName('');
+    setTasks((prevTasks) => prevTasks.filter(task => task.id !== id));
   }
+
+  function toggleTaskStatus(id: number) {
+    setTasks((prevTasks) => 
+      prevTasks.map(task => 
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
+  }
+
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(task => task.isChecked).length;
 
   return (
     <main>
-
       <Header />
-
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
-          <Input
-            onChange={(e) => setInputName(e.target.value)}
-            value={inputName}
+          <Input 
+            onChange={(e) => setTaskText(e.target.value)}
+            value={taskText}
           />
           <Button onClick={handleNewAddTask}>
             Criar
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
-
+        <div className={styles.progressContainer}>
+          <p>Progresso: {completedTasks} / {totalTasks} tarefas concluídas</p>
+        </div>
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
-              {tasks.map((task) => {
-                return (
-                  <Item
-                    key={task.id}
-                    data={task}
-                    removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
-                  />
-                )
-              })}
+              {tasks.map((task) => (
+                <Item
+                  key={task.id}
+                  data={task}
+                  removeTask={() => handleRemoveTask(task.id)}
+                  toggleTaskStatus={() => toggleTaskStatus(task.id)}
+                />
+              ))}
             </div>
           ) : (
             <Empty />
@@ -80,5 +76,5 @@ export function App() {
         </div>
       </section>
     </main>
-  )
+  );
 }
