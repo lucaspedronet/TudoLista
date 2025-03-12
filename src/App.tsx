@@ -39,6 +39,7 @@ export function App() {
 
   function deleteTask(id: number) {
     setTasks((tarefas) => tarefas.filter((task) => task.id !== id));
+    setInputName('');
   }
 
   function toggleTaskStatus({ id, value }: { id: number; value: boolean }) {
@@ -59,7 +60,6 @@ export function App() {
       <Header />
 
       <section className={styles.content}>
-
         {/* Barra de Progresso e Contador de Tarefas */}
         <div className={styles.taskProgressContainer}>
           <div className={styles.taskProgressText}>
