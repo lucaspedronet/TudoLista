@@ -41,15 +41,47 @@ export function App() {
     setTasks((tarefas) => tarefas.filter((task) => task.id !== id));
   }
 
-  // function finalizarTask(){}
-    
-  
+  function toggleTaskStatus({ id, value }: { id: number; value: boolean }) {
+    console.log(`Tarefa ${id} alterando status de ${value} para ${!value}`);
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
+  }
+
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter((task) => task.isChecked).length;
+  const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
   return (
     <main>
       <Header />
 
       <section className={styles.content}>
+
+        {/* Barra de Progresso e Contador de Tarefas */}
+        <div className={styles.taskProgressContainer}>
+          <div className={styles.taskProgressText}>
+            <p>
+              Tarefas concluídas:
+            </p>
+            <span>
+              <strong>{completedTasks}</strong> de  
+              <strong> {totalTasks}</strong>
+            </span>
+              
+          </div>
+
+          {/* Barra de Progresso */}
+          <div className={styles.progressBarContainer}>
+            <div
+              className={styles.progressBar}
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
         <div className={styles.taskInfoContainer}>
           <Input
             onChange={(e) => setInputName(e.target.value)}
@@ -61,6 +93,7 @@ export function App() {
           </Button>
         </div>
 
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
@@ -69,7 +102,7 @@ export function App() {
                   key={task.id}
                   data={task}
                   removeTask={deleteTask}
-                  toggleTaskStatus={() => {}}
+                  toggleTaskStatus={toggleTaskStatus}
                 />
               ))}
             </div>
