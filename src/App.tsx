@@ -43,6 +43,17 @@ export function App() {
     setInputName('');
   }
 
+  function handleToggleCheck(id: number, value: boolean) {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id) {
+        task.isChecked = value;
+      }
+      return task;
+    });
+
+    setTasks(updatedTasks);
+  }
+
   return (
     <main>
 
@@ -60,6 +71,13 @@ export function App() {
           </Button>
         </div>
 
+        <div className={styles.taskInfoContainer}>
+          <p>
+            {tasks.map((task) => task.isChecked).filter(Boolean).length} de {tasks.length} tarefas concluídas
+          </p>
+
+        </div>
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
@@ -69,7 +87,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={() => handleToggleCheck(task.id, !task.isChecked)}
                   />
                 )
               })}
