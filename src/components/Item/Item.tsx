@@ -10,7 +10,7 @@ interface Props {
   toggleTaskStatus: ({ id, value }: { id: number; value: boolean }) => void
 }
 
-export function Item({ data, removeTask }: Props) {
+export function Item({ data, removeTask, toggleTaskStatus }: Props) {
 
   const checkboxCheckedClassname = data.isChecked
     ? styles['checkbox-checked']
@@ -22,7 +22,7 @@ export function Item({ data, removeTask }: Props) {
   return (
     <div className={styles.container}>
       <div>
-        <label htmlFor="checkbox" onClick={() => {}}>
+        <label htmlFor="checkbox" onClick={() => toggleTaskStatus({ id: data.id, value: !data.isChecked })}>
           <input readOnly type="checkbox" checked={data.isChecked} />
           <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
             {data.isChecked && <Check size={12} />}

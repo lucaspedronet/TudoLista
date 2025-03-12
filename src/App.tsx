@@ -48,6 +48,15 @@ export function App() {
     setTasks((nextState) => nextState.filter((task) => task.id !== id));
   }
 
+  function handleCheckTask(id: number) {
+    // nextState => nextState.map((task) => task.id === id ? { ...task, isChecked: !task.isChecked } : task)
+    setTasks((nextState) =>
+      nextState.map((task) =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
+  }
+
   return (
     <main>
 
@@ -65,6 +74,12 @@ export function App() {
           </Button>
         </div>
 
+        <div className={styles.taskInfoContainer}>
+          <p>
+            {tasks.filter((task) => task.isChecked).length} de {tasks.length} concluídas
+          </p>
+        </div>
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
@@ -74,7 +89,8 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={() => handleRemoveTask(task.id)}
-                    toggleTaskStatus={() => {}}
+                    //marcar item como concluído
+                    toggleTaskStatus={() => handleCheckTask(task.id)}
                   />
                 )
               })}
