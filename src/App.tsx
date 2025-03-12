@@ -21,11 +21,13 @@ export function App() {
    if (inputName.trim().length <= 0) {
     return;
    }
+
    const existTask = tasks.find(t => t.text === inputName);
 
    if (existTask) {
     return;
    }
+   
    const newTask: ITask = {
     id: Math.random(),
     text: inputName,
@@ -38,6 +40,7 @@ export function App() {
     const filterTasks = tasks.filter(task => task.id !== id);
 
     setTasks(filterTasks);
+    setInputName('');
   }
 
   return (
