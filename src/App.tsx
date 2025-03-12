@@ -17,6 +17,9 @@ export function App() {
   const [tasks, setTasks] = useState(initialState);
   const [inputName, setInputName] = useState('');
 
+  const total = tasks.length;
+  const tarefasConcluidas = tasks.filter(task => task.isChecked).length;
+
   function handleNewAddTask() {
    if (inputName.trim().length <= 0) {
     return;
@@ -43,6 +46,19 @@ export function App() {
     setInputName('');
   }
 
+  function handleToggleTaskStatus({ id, value }: { id: number; value: boolean }) {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id) {
+        const updatedTask = { ...task, isChecked: value };
+        return updatedTask;
+      } else {
+        return task;
+      }
+    });
+  
+    setTasks(updatedTasks);
+  }
+
   return (
     <main>
 
@@ -60,6 +76,11 @@ export function App() {
           </Button>
         </div>
 
+        <div>
+          <strong>Total de tarefas</strong>
+          <span> {tarefasConcluidas} / {total}</span>
+        </div>
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
@@ -69,7 +90,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={handleToggleTaskStatus} 
                   />
                 )
               })}
