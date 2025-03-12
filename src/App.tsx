@@ -34,7 +34,7 @@ export function App() {
       isChecked: false,
     };
     setTasks((prevState) => [...prevState, newTask]);
-    setInputName("");
+    setInputName("  ");
   }
 
   function removeTask(id: number) {
