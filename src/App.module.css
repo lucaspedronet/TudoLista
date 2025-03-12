@@ -5,6 +5,13 @@
   margin: 0 auto;
 }
 
+.barraProgresso {
+  display: flex;
+  margin: 20px;
+  justify-content: end;
+}
+
+
 .taskInfoContainer {
   display: flex;
   flex: 1;

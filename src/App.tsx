@@ -3,7 +3,7 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 export interface ITask {
   id: number
   text: string
@@ -16,6 +16,12 @@ const initialState: ITask[] = [];
 export function App() {
   const [tasks, setTasks] = useState(initialState);
   const [inputName, setInputName] = useState('');
+  const [checkedTasksCounter, setCheckedTasksCounter] = useState(0);
+
+
+  const qtTasksTotal = tasks.length;
+  const qtTasksConcluidas = tasks.filter(task => task.isChecked).length;
+  const valorPorcentagem = (qtTasksConcluidas / qtTasksTotal ) * 100
 
   function handleNewAddTask() {
    if (inputName.trim().length <= 0) {
@@ -43,12 +49,24 @@ export function App() {
     setInputName('');
   }
 
+  function marcarDesmarcarTask(id: number, value: boolean) {
+    const filterTasksConcluidas = tasks.map(task => task.id === id ?
+       {...task, isChecked: value} : task)
+
+    setTasks(filterTasksConcluidas)
+  }
+
+  useEffect(() => {
+    setCheckedTasksCounter(qtTasksConcluidas);
+  }, [tasks]);
+
   return (
     <main>
 
       <Header />
 
       <section className={styles.content}>
+
         <div className={styles.taskInfoContainer}>
           <Input
             onChange={(e) => setInputName(e.target.value)}
@@ -60,6 +78,11 @@ export function App() {
           </Button>
         </div>
 
+        <div className={styles.barraProgresso}>
+            <progress value={valorPorcentagem} max="100"></progress>
+            <span>{checkedTasksCounter}/{qtTasksTotal}</span>
+        </div>
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
@@ -69,7 +92,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={() => marcarDesmarcarTask(task.id, !task.isChecked)}
                   />
                 )
               })}
