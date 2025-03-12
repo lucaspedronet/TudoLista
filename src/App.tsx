@@ -1,51 +1,48 @@
-import { PlusCircle } from '@phosphor-icons/react'
+import { PlusCircle } from '@phosphor-icons/react';
+import styles from './App.module.css';
 
-import styles from './App.module.css'
-
-import { Button, Input, Empty, Item, Header } from './components'
+import { Button, Input, Empty, Item, Header } from './components';
 import { useState } from 'react';
+
 export interface ITask {
-  id: number
-  text: string
-  isChecked: boolean
+  id: number;
+  text: string;
+  isChecked: boolean;
 }
 
-// const BRANCH = 'aula04/gestor-tarefas';
-const initialState: ITask[] = [];
-
 export function App() {
-  const [tasks, setTasks] = useState(initialState);
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const [inputName, setInputName] = useState('');
 
+  // Cálculos diretamente na renderização
+  const totalTarefas = tasks.length;
+  const tarefasConcluidas = tasks.filter(task => task.isChecked).length;
+
+  // Função de adicionar tarefa
   function handleNewAddTask() {
-   if (inputName.trim().length <= 0) {
-    return;
-   }
+    if (!inputName.trim()) return; // Evita adicionar tarefas vazias
 
-   const existTask = tasks.find(t => t.text === inputName);
+    const newTask: ITask = {
+      id: Date.now(),
+      text: inputName,
+      isChecked: false,
+    };
 
-   if (existTask) {
-    return;
-   }
-   
-   const newTask: ITask = {
-    id: Math.random(),
-    text: inputName,
-    isChecked: false,
-   };
-   setTasks((prevState) => [...prevState, newTask]);
+    setTasks([...tasks, newTask]);
+    setInputName('');
   }
 
-  function handleRemoveTask(id: number) {
-    const filterTasks = tasks.filter(task => task.id !== id);
+  function removeTask(id: number) {
+    setTasks(tasks.filter(task => task.id !== id));
+  }
 
-    setTasks(filterTasks);
-    setInputName('');
+  function handleToggleTaskStatus({ id, value }: { id: number; value: boolean }) {
+    const updatedTasks = tasks.map(task => task.id === id ? { ...task, isChecked: value } : task);
+    setTasks(updatedTasks);
   }
 
   return (
     <main>
-
       <Header />
 
       <section className={styles.content}>
@@ -60,19 +57,26 @@ export function App() {
           </Button>
         </div>
 
+        <div className={styles.taskCounters}>
+          <div>
+            <strong>Total de tarefas</strong>
+            <p>{totalTarefas}</p>
+            <strong>Total de concluídas </strong>
+            <p>{tarefasConcluidas}</p>
+          </div>
+        </div>
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
-              {tasks.map((task) => {
-                return (
-                  <Item
-                    key={task.id}
-                    data={task}
-                    removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
-                  />
-                )
-              })}
+              {tasks.map(task => (
+                <Item
+                  key={task.id}
+                  data={task}
+                  removeTask={() => removeTask(task.id)}
+                  toggleTaskStatus={handleToggleTaskStatus}
+                />
+              ))}
             </div>
           ) : (
             <Empty />
@@ -80,5 +84,5 @@ export function App() {
         </div>
       </section>
     </main>
-  )
+  );
 }
