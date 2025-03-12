@@ -6,10 +6,10 @@ export function Header() {
       <img src="/logo.svg" alt="logo da aplicação" />
     </header>
   )
-
-
-
 }
 
+export function Header2() {
 
+  return (<div>Lucas Pedro</div>);
 
+}

@@ -1,151 +1,80 @@
 import { PlusCircle } from '@phosphor-icons/react'
-<<<<<<< Updated upstream
-import { useActionState, useEffect, useState } from 'react'
-import PropTypes from 'prop-types';
-import styles from './App.module.css'
-
-import { Button } from './components/Button/Button'
-import { Header} from './components/Header/Header'
-import { Input } from './components/Input/Input'
-import { Empty } from './components/Empty/Empty'
-import { Header as ListHeader } from './components/Header/Header'
-import { Item } from './components/Item/Item'
-
-=======
+import { useState } from 'react'
 
 import styles from './App.module.css'
 
-import { Button, Input, Empty, Item, Header } from './components'
-import { useState } from 'react';
->>>>>>> Stashed changes
+import { Button } from './components/Button'
+import { Header, Header2 } from './components/Header'
+import { Input } from './components/Input'
+import { Empty } from './components/List/Empty'
+import { Header as ListHeader } from './components/List/Header'
+import { Item } from './components/List/Item'
+
 export interface ITask {
-  id: number;
-  text: string;
-  isChecked: boolean;
+  id: number
+  text: string
+  isChecked: boolean
 }
 
-
-
 export function App() {
-  const [tasks, setTasks] = useState<ITask[]>([]);
-<<<<<<< Updated upstream
-  const [inputName, setInputName] = useState("");
-  const [TasksCount, setTasksCount] = useState(0);
-  function addTask() {
-    if (inputName.trim().length <= 0) {
-      return;
-    }
-    const existTask = tasks.find((t) => t.text === inputName);
-    if (existTask) {
-      return;
-    }
-    const newTask: ITask = {
-      id: Math.random(),
-      text: inputName,
-=======
+  const [tasks, setTasks] = useState<ITask[]>([])
+  const [inputValue, setInputValue] = useState('');
 
-  function handleNewAddTask() {
-    const newTask: ITask = {
-      id: Math.random(), // número aleatório
-      text: 'Task nova pessoal',
->>>>>>> Stashed changes
+  const handleAddTarefa = () => {
+    if(inputValue.trim() === '') return;
+
+    const newTarefa = {
+      id: Date.now(),
+      text: inputValue,
       isChecked: false,
     };
-    setTasks((prevState) => [...prevState, newTask]);
-    setInputName("  ");
-  }
 
-<<<<<<< Updated upstream
-  function removeTask(id: number) {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  }
-  function toggleTaskStatus(id: number) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, isChecked: !task.isChecked } : task
-      )
-    );
-  }
- 
-//_________________________
-    return (
-      <main>
-        <Header />
+    setTasks([...tasks, newTarefa]); setInputValue('');
+  } 
 
-        <section className={styles.content}>
-          <div className={styles.taskInfoContainer}>
-            <Input
-              onChange={(e) => setInputName(e.target.value)}
-              value={inputName}
-            />
-            <Button onClick={addTask}>
-              Criar
-              <PlusCircle size={16} color="#f2f2f2" weight="bold" />
-            </Button>
-          </div>
+  const handleRemoverTarefa = (id: number) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
 
-          <div className={styles.tasksList}>
-            {tasks.length > 0 ? (
-              <div>
-                {tasks.map((task) => (
-                  <Item
-                    key={task.id}
-                    data={task}
-                    removeTask={() => removeTask(task.id)}
-                    toggleTaskStatus={() => {toggleTaskStatus(task.id);
-                    }}
-                  />
-                ))}
-              </div>
-            ) : (
-              <Empty />
-            )}
-          </div>
-        </section>
-      </main>
-    );
-  }
+  const handleAlterarTaskStatus = ({ id, value }: { id: number; value: boolean }) => {
+    setTasks(tasks.map(task =>
+      task.id === id ? { ...task, isChecked: value } : task
+    ));
+  };
 
-=======
-    // nextState => [...nextState, newTask]
-    setTasks((nextState) => {
-      const newState = [...nextState, newTask];
-      return newState;
-    });
-    
-    console.log("Tasks: ", tasks);
-  }
+  const checkedTasksCounter = tasks.filter(task => task.isChecked).length;
 
   return (
     <main>
-
-      <Header />
-
+      <Header/>
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
-            onChange={() => {}}
-            value={''}
+            onChange={(e) => setInputValue(e.target.value)}
+            value={inputValue}
           />
-          <Button onClick={handleNewAddTask}>
+          <Button onClick={handleAddTarefa}>
             Criar
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
 
         <div className={styles.tasksList}>
+          <ListHeader
+            tasksCounter={tasks.length}
+            checkedTasksCounter={checkedTasksCounter}
+          />
+
           {tasks.length > 0 ? (
             <div>
-              {tasks.map(function nomeDaFuncao(task) {
-                return (
-                  <Item
-                    key={task.id}
-                    data={task}
-                    removeTask={() => {}}
-                    toggleTaskStatus={() => {}}
-                  />
-                )
-              })}
+              {tasks.map((task) => (
+                <Item
+                  key={task.id}
+                  data={task}
+                  removeTask={() => handleRemoverTarefa(task.id)}
+                  toggleTaskStatus={handleAlterarTaskStatus}
+                />
+              ))}
             </div>
           ) : (
             <Empty />
@@ -155,4 +84,3 @@ export function App() {
     </main>
   )
 }
->>>>>>> Stashed changes
