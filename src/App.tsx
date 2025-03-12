@@ -29,16 +29,15 @@ const listaDeTarefas: ITask[] = [
 ];
 
 export function App() {
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [tasks, setTasks] = useState<ITask[]>(listaDeTarefas);
   const [inputName, setInputName] = useState('');
 
   function handleNewAddTask() {
-    if (
-      inputName.trim().length === 0 ||
-      tasks.some((task) => task.text === inputName)
-    ) {
+    if (tasks.some((task) => task.text === inputName)) {
       alert('Tarefa ja existe!');
-
+      return;
+    } else if (inputName.trim().length === 0) {
+      alert('Escreva algo');
       return;
     }
 
@@ -48,12 +47,23 @@ export function App() {
       isChecked: false,
     };
 
-    setTasks((lastTasks) => [...lastTasks, newTask]);
+    setTasks((lastTasks) => [...lastTasks, newTask]); ///basicamente o rest permite que eu traga todas as anteriores de volta.
     setInputName('');
   }
 
   function removeTask(id: number) {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  }
+
+  function toggleTaskStatus(id: number) {
+    console.log('chamou?');
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id
+          ? { ...task, isChecked: !task.isChecked } // Inverte o valor de isChecked
+          : task
+      )
+    );
   }
 
   return (
@@ -68,7 +78,7 @@ export function App() {
           />
 
           <Button onClick={handleNewAddTask}>
-            Criar
+            New
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
@@ -82,7 +92,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={removeTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={() => toggleTaskStatus(task.id)}
                   />
                 );
               })}
