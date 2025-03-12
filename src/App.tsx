@@ -13,7 +13,7 @@ export function App() {
   const [tasks, setTasks] = useState<ITask[]>([
     {
       id: 1,
-      text: "Demo",
+      text: "Teste",
       isChecked: false,
     },
   ]);
@@ -42,8 +42,7 @@ export function App() {
     setInputName('');
   }
 
-  function toggleTaskStatus({ id, value }: { id: number; value: boolean }) {
-    console.log(`Tarefa ${id} alterando status de ${value} para ${!value}`);
+  function toggleTaskStatus({ id}: { id: number }) {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id ? { ...task, isChecked: !task.isChecked } : task
@@ -60,7 +59,7 @@ export function App() {
       <Header />
 
       <section className={styles.content}>
-        {/* Barra de Progresso e Contador de Tarefas */}
+        
         <div className={styles.taskProgressContainer}>
           <div className={styles.taskProgressText}>
             <p>

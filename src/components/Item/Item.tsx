@@ -5,7 +5,7 @@ import styles from './Item.module.css'
 interface Props {
   data: ITask
   removeTask: (id: number) => void
-  toggleTaskStatus: ({ id, value }: { id: number; value: boolean }) => void
+  toggleTaskStatus: ({ id }: { id: number }) => void
 }
 
 export function Item({ data, removeTask, toggleTaskStatus}: Props) {
@@ -20,7 +20,7 @@ export function Item({ data, removeTask, toggleTaskStatus}: Props) {
   return (
     <div className={styles.container}>
       <div>
-        <label htmlFor="checkbox" onClick={() => toggleTaskStatus({ id: data.id, value: data.isChecked })}>
+        <label htmlFor="checkbox" onClick={() => toggleTaskStatus({ id: data.id})}>
           <input readOnly type="checkbox" checked={data.isChecked} />
           <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
             {data.isChecked && <Check size={12} />}
