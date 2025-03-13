@@ -1,9 +1,22 @@
+* {
+  font-family: 'Poppins', sans-serif;  /* Apply Poppins font globally */
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;  /* Ensure body text uses Poppins font */
+}
+
+
 .content{
   max-width: 46rem;
   width: 100%;
 
   margin: 0 auto;
 }
+
+
 
 .taskInfoContainer {
   display: flex;

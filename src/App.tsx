@@ -3,19 +3,32 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ProgressBar } from './components/ProgressBar/ProgressBar';
 export interface ITask {
   id: number
   text: string
   isChecked: boolean
 }
 
-// const BRANCH = 'aula04/gestor-tarefas';
 const initialState: ITask[] = [];
 
 export function App() {
   const [tasks, setTasks] = useState(initialState);
   const [inputName, setInputName] = useState('');
+  const [ progress, setProgress ] = useState(0);
+  //criando uma variável de estado que vai mudar ambos os seus valores quando houver uma alteração
+  const [completedTasksRatio, setCompletedTasksRatio] = useState({ completedTasks: 0, totalTasks: 0 });
+
+  useEffect(() => {
+    const completedTasks = tasks.filter(task => task.isChecked).length;
+    const totalTasks = tasks.length;
+    const newProgress = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
+    setProgress(newProgress);
+
+    setCompletedTasksRatio({ completedTasks, totalTasks })
+  }, [tasks]);
+
 
   function handleNewAddTask() {
    if (inputName.trim().length <= 0) {
@@ -27,13 +40,14 @@ export function App() {
    if (existTask) {
     return;
    }
-   
+
    const newTask: ITask = {
     id: Math.random(),
     text: inputName,
     isChecked: false,
    };
    setTasks((prevState) => [...prevState, newTask]);
+   setInputName('');
   }
 
   function handleRemoveTask(id: number) {
@@ -41,6 +55,13 @@ export function App() {
 
     setTasks(filterTasks);
     setInputName('');
+  }
+
+  function toggleTaskStatus(id: number){
+    setTasks((prevTask) =>  
+      prevTask.map((task) => 
+        task.id === id ? {...task, isChecked: !task.isChecked } : task
+    ));
   }
 
   return (
@@ -60,19 +81,32 @@ export function App() {
           </Button>
         </div>
 
+        <div className={styles.ratioContainer}>
+          {completedTasksRatio.totalTasks > 0 ? (
+            <p>{completedTasksRatio.completedTasks} / {completedTasksRatio.totalTasks} tarefas completas
+            </p>
+          ) : (
+            <p>Nenhuma tarefa ainda!
+
+            </p>
+          )}
+        </div>
+
+        <ProgressBar progress={progress} />
+        
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
-              {tasks.map((task) => {
-                return (
+              {tasks.map((task) => (
                   <Item
                     key={task.id}
                     data={task}
+                    //eu passo essas funções, mas o item que decide se quer usar ou não
                     removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={toggleTaskStatus}
                   />
-                )
-              })}
+              ))}
             </div>
           ) : (
             <Empty />
