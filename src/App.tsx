@@ -62,7 +62,7 @@ export function App() {
   }, [tasks]);
 
   const completedTasks = tasks.filter((task) => task.isChecked).length;
-  const remainingTasks = tasks.length - completedTasks;
+  const totalTasks = tasks.length;
 
   return (
     <main>
@@ -92,7 +92,7 @@ export function App() {
           </div>
 
           <p className={styles.progressInfo}>
-            <br />{completedTasks}/{tasks.length} tarefas concluídas!
+            <br />{completedTasks}/{totalTasks} tarefas concluídas!
           </p>
 
         </div>
