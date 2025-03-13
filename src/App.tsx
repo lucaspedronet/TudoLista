@@ -92,7 +92,7 @@ export function App() {
           </div>
 
           <p className={styles.progressInfo}>
-            <br />{completedTasks}/{remainingTasks} tarefas concluídas!
+            <br />{completedTasks}/{tasks.length} tarefas concluídas!
           </p>
 
         </div>
