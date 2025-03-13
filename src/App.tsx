@@ -34,14 +34,25 @@ export function App() {
     isChecked: false,
    };
    setTasks((prevState) => [...prevState, newTask]);
+   setInputName('');
   }
 
   function handleRemoveTask(id: number) {
     const filterTasks = tasks.filter(task => task.id !== id);
 
     setTasks(filterTasks);
-    setInputName('');
   }
+
+  function handleToggleTaskStatus(id: number) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
+  }
+
+  const completedTasks = tasks.filter((task) => task.isChecked).length;
+  const totalTasks = tasks.length;
 
   return (
     <main>
@@ -59,6 +70,11 @@ export function App() {
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
+        <div className={styles.progress}>
+          <p>
+            Tarefas concluídas: {completedTasks} de {totalTasks}
+          </p>
+        </div>
 
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
@@ -69,7 +85,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={() => handleToggleTaskStatus(task.id)}
                   />
                 )
               })}
