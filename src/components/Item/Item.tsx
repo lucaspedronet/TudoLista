@@ -7,10 +7,10 @@ import styles from './Item.module.css'
 interface ItemProps {
   data: ITask
   removeTask: (id: number) => void
-  toggleTaskStatus: ({ id, value }: { id: number; value: boolean }) => void
+  toggleTaskStatus: (id: number) => void
 }
 
-export function Item({ data, removeTask }: ItemProps) {
+export function Item({ data, removeTask, toggleTaskStatus }: ItemProps) {
 
   const checkboxCheckedClassname = data.isChecked
     ? styles['checkbox-checked']
@@ -22,7 +22,7 @@ export function Item({ data, removeTask }: ItemProps) {
   return (
     <div className={styles.container}>
       <div>
-        <label htmlFor="checkbox" onClick={() => {}}>
+        <label htmlFor="checkbox" onClick={() => {toggleTaskStatus(data.id)}}>
           <input readOnly type="checkbox" checked={data.isChecked} />
           <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
             {data.isChecked && <Check size={12} />}

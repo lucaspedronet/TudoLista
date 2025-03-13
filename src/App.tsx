@@ -3,7 +3,7 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
-import { useState } from 'react';
+import { use, useState } from 'react';
 export interface ITask {
   id: number
   text: string
@@ -16,6 +16,7 @@ const initialState: ITask[] = [];
 export function App() {
   const [tasks, setTasks] = useState(initialState);
   const [inputName, setInputName] = useState('');
+  const [totalTasks, setTotalTasks] = useState(0);
 
   function handleNewAddTask() {
    if (inputName.trim().length <= 0) {
@@ -34,13 +35,24 @@ export function App() {
     isChecked: false,
    };
    setTasks((prevState) => [...prevState, newTask]);
+   setTotalTasks((totalTasks) => totalTasks+1);
   }
+
+  const tasksCompleted = tasks.filter((task) => task.isChecked).length;
 
   function handleRemoveTask(id: number) {
     const filterTasks = tasks.filter(task => task.id !== id);
 
     setTasks(filterTasks);
     setInputName('');
+  }
+
+  function handleToggleTaskStatus(id: number) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
+      )
+    );
   }
 
   return (
@@ -60,6 +72,8 @@ export function App() {
           </Button>
         </div>
 
+        <div style={{marginBottom:'20px'}}> <h1> Tarefas:{tasksCompleted}/{totalTasks} </h1></div>
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
@@ -69,7 +83,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={handleToggleTaskStatus}
                   />
                 )
               })}
