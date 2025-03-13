@@ -3,7 +3,7 @@ import { PlusCircle } from '@phosphor-icons/react'
 import styles from './App.module.css'
 
 import { Button, Input, Empty, Item, Header } from './components'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 export interface ITask {
   id: number
   text: string
@@ -16,6 +16,7 @@ const initialState: ITask[] = [];
 export function App() {
   const [tasks, setTasks] = useState(initialState);
   const [inputName, setInputName] = useState('');
+  const [progress, setProgress] = useState(0);
 
   function handleNewAddTask() {
    if (inputName.trim().length <= 0) {
@@ -23,6 +24,8 @@ export function App() {
    }
 
    const existTask = tasks.find(t => t.text === inputName);
+
+   setInputName('')
 
    if (existTask) {
     return;
@@ -43,6 +46,24 @@ export function App() {
     setInputName('');
   }
 
+  function toggleTaskStatus({ id, value }: { id: number; value: boolean }) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, isChecked: value } : task
+      )
+    );
+  }
+
+  useEffect(() => {
+    const completedTasks = tasks.filter((task) => task.isChecked).length;
+    const totalTasks = tasks.length;
+    const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100: 0;
+    setProgress(progressPercentage);
+  }, [tasks]);
+
+  const completedTasks = tasks.filter((task) => task.isChecked).length;
+  const remainingTasks = tasks.length - completedTasks;
+
   return (
     <main>
 
@@ -60,6 +81,22 @@ export function App() {
           </Button>
         </div>
 
+        {/* Progress Bar */}
+        <div className={styles.progressContainer}>
+          <h3 className={styles.progressTitle}>Progresso</h3>
+          <div className={styles.progressBarContainer}>
+            <div
+              className={styles.progressBar}
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+
+          <p className={styles.progressInfo}>
+            <br />{completedTasks}/{remainingTasks} tarefas concluídas!
+          </p>
+
+        </div>
+
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
             <div>
@@ -69,7 +106,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={handleRemoveTask}
-                    toggleTaskStatus={() => {}}
+                    toggleTaskStatus={toggleTaskStatus}
                   />
                 )
               })}
@@ -80,5 +117,5 @@ export function App() {
         </div>
       </section>
     </main>
-  )
+  );
 }
