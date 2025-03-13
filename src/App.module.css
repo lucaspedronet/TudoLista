@@ -50,11 +50,10 @@
 }
 
 .progressBarContainer {
-  display: flex;
   width: 100%;
   background-color: var(--gray-200);
   border-radius: 8px;
-  height: 8px; /* Altura da barra */
+  height: 12px; /* Altura da barra */
 }
 
 .progressBar {

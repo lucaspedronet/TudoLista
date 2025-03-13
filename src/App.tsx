@@ -72,7 +72,6 @@ export function App() {
               
           </div>
 
-          {/* Barra de Progresso */}
           <div className={styles.progressBarContainer}>
             <div
               className={styles.progressBar}
