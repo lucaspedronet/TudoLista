@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { PlusCircle } from '@phosphor-icons/react';
-=======
-import { AlignCenterVertical, PlusCircle } from '@phosphor-icons/react';
->>>>>>> emanuelBruno/aula-04-atividade
 
 import styles from './App.module.css';
 
@@ -14,24 +10,6 @@ export interface ITask {
   isChecked: boolean;
 }
 
-<<<<<<< HEAD
-// const BRANCH = 'aula04/gestor-tarefas';
-const initialState: ITask[] = [];
-
-export function App() {
-  const [tasks, setTasks] = useState(initialState);
-  const [inputName, setInputName] = useState('');
-  const [totalTasks, setTotalTasks] = useState(0);
-
-  function handleNewAddTask() {
-    if (inputName.trim().length <= 0) {
-      return;
-    }
-
-    const existTask = tasks.find((t) => t.text === inputName);
-
-    if (existTask) {
-=======
 const listaDeTarefas: ITask[] = [
   {
     id: 1,
@@ -62,7 +40,6 @@ export function App() {
       return;
     } else if (inputName.trim().length === 0) {
       alert('Escreva algo');
->>>>>>> emanuelBruno/aula-04-atividade
       return;
     }
 
@@ -71,10 +48,6 @@ export function App() {
       text: inputName,
       isChecked: false,
     };
-<<<<<<< HEAD
-    setTasks((prevState) => [...prevState, newTask]);
-    setTotalTasks((prevTotal) => prevTotal + 1);
-=======
 
     setTasks((lastTasks) => [...lastTasks, newTask]); ///basicamente o rest permite que eu traga todas as anteriores de volta.
     setInputName('');
@@ -95,25 +68,10 @@ export function App() {
         task.id === id ? { ...task, isChecked: !task.isChecked } : task
       )
     );
->>>>>>> emanuelBruno/aula-04-atividade
   }
 
   const completedTasks = tasks.filter((task) => task.isChecked).length;
 
-  function handleRemoveTask(id: number) {
-    const filterTasks = tasks.filter((task) => task.id !== id);
-
-    setTasks(filterTasks);
-    setInputName('');
-  }
-
-  function toggleTaskStatus(id: number) {
-    setTasks((oldTasks) =>
-      oldTasks.map((task) =>
-        task.id === id ? { ...task, isChecked: !task.isChecked } : task
-      )
-    );
-  }
   return (
     <main>
       <Header />
@@ -165,11 +123,7 @@ export function App() {
                   <Item
                     key={task.id}
                     data={task}
-<<<<<<< HEAD
-                    removeTask={handleRemoveTask}
-=======
                     removeTask={removeTask}
->>>>>>> emanuelBruno/aula-04-atividade
                     toggleTaskStatus={toggleTaskStatus}
                   />
                 );
