@@ -88,13 +88,6 @@ export function App() {
           </Button>
           <div></div>
         </div>
-        <section style={{ marginBottom: '30px', textAlign: 'center' }}>
-          {' '}
-          <h1>
-            {' '}
-            Tarefas : {completedTasks} / {tasks.length} concluidas
-          </h1>
-        </section>
 
         <div style={{ marginBottom: '15px' }}>
           <div className={styles.progressWrapper}>
