@@ -12,7 +12,7 @@ export interface ITask {
 
 const listaDeTarefas: ITask[] = [
   {
-    id: 1878,
+    id: 1,
     text: 'Estudar React',
     isChecked: false,
   },
@@ -32,7 +32,7 @@ export function App() {
   const [tasks, setTasks] = useState<ITask[]>(listaDeTarefas);
   const [inputName, setInputName] = useState('');
   const [totalTask, setTotalTask] = useState(3);
-  const [totalConcluida, setTotalConcluida] = useState(0);
+  const totalConcludeTask = tasks.filter((task) => task.isChecked).length;
 
   function handleNewAddTask() {
     if (tasks.some((task) => task.text === inputName)) {
@@ -56,9 +56,13 @@ export function App() {
 
   function removeTask(id: number) {
     setTasks((oldTasks) => oldTasks.filter((task) => task.id !== id));
+    setTotalTask((antigoTotal) => antigoTotal - 1);
   }
 
   function toggleTaskStatus(id: number) {
+    console.log(
+      tasks.filter((task) => task.isChecked || task.isChecked === false).length
+    );
     setTasks((oldTasks) =>
       oldTasks.map((task) =>
         task.id === id ? { ...task, isChecked: !task.isChecked } : task
@@ -81,10 +85,24 @@ export function App() {
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
-        <div style={{ marginBottom: ' 15px', fontSize: '24px' }}>
-          <span>
-            Tasks : {totalTask} /{null}
-          </span>
+
+        <div style={{ marginBottom: '15px' }}>
+          <div className={styles.progressWrapper}>
+            <span className={styles.progressText}>
+              Tasks: {totalConcludeTask} / {totalTask}
+            </span>
+            <div className={styles.progressContainer}>
+              <div
+                className={styles.progressBar}
+                style={{
+                  width:
+                    totalTask > 0
+                      ? `${(totalConcludeTask / totalTask) * 100}%`
+                      : '0%',
+                }}
+              />
+            </div>
+          </div>
         </div>
 
         <div className={styles.tasksList}>
