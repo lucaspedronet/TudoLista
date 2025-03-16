@@ -21,7 +21,12 @@ export function Item({ data, removeTask, toggleTaskStatus }: Props) {
   return (
     <div className={styles.container}>
       <div>
-        <label htmlFor="checkbox" onClick={() => toggleTaskStatus(data.id)}>
+        <label
+          htmlFor="checkbox"
+          onClick={() => {
+            toggleTaskStatus(data.id);
+          }}
+        >
           <input readOnly type="checkbox" checked={data.isChecked} />
           <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
             {data.isChecked && <Check size={12} />}
@@ -33,11 +38,8 @@ export function Item({ data, removeTask, toggleTaskStatus }: Props) {
         </label>
       </div>
 
-      <button
-        onClick={() => {
-          removeTask(data.id);
-        }}
-      >
+      <button onClick={() => removeTask(data.id)}>
+        {' '}
         <Trash size={16} color="#808080" />
       </button>
     </div>

@@ -31,6 +31,8 @@ const listaDeTarefas: ITask[] = [
 export function App() {
   const [tasks, setTasks] = useState<ITask[]>(listaDeTarefas);
   const [inputName, setInputName] = useState('');
+  const [totalTask, setTotalTask] = useState(3);
+  const [totalConcluida, setTotalConcluida] = useState(0);
 
   function handleNewAddTask() {
     if (tasks.some((task) => task.text === inputName)) {
@@ -49,19 +51,17 @@ export function App() {
 
     setTasks((lastTasks) => [...lastTasks, newTask]); ///basicamente o rest permite que eu traga todas as anteriores de volta.
     setInputName('');
+    setTotalTask((lastTotal) => lastTotal + 1);
   }
 
   function removeTask(id: number) {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    setTasks((oldTasks) => oldTasks.filter((task) => task.id !== id));
   }
 
   function toggleTaskStatus(id: number) {
-    console.log('chamou?');
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id
-          ? { ...task, isChecked: !task.isChecked } // Inverte o valor de isChecked
-          : task
+    setTasks((oldTasks) =>
+      oldTasks.map((task) =>
+        task.id === id ? { ...task, isChecked: !task.isChecked } : task
       )
     );
   }
@@ -69,7 +69,6 @@ export function App() {
   return (
     <main>
       <Header />
-
       <section className={styles.content}>
         <div className={styles.taskInfoContainer}>
           <Input
@@ -82,6 +81,11 @@ export function App() {
             <PlusCircle size={16} color="#f2f2f2" weight="bold" />
           </Button>
         </div>
+        <div style={{ marginBottom: ' 15px', fontSize: '24px' }}>
+          <span>
+            Tasks : {totalTask} /{null}
+          </span>
+        </div>
 
         <div className={styles.tasksList}>
           {tasks.length > 0 ? (
@@ -92,7 +96,7 @@ export function App() {
                     key={task.id}
                     data={task}
                     removeTask={removeTask}
-                    toggleTaskStatus={() => toggleTaskStatus(task.id)}
+                    toggleTaskStatus={toggleTaskStatus}
                   />
                 );
               })}
